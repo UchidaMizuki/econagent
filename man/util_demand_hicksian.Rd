@@ -4,7 +4,7 @@
 \alias{util_demand_hicksian}
 \title{Hicksian demand function}
 \usage{
-util_demand_hicksian(f, prices, utility, grad = FALSE, ...)
+util_demand_hicksian(f, prices, utility, gradient = FALSE, ...)
 }
 \arguments{
 \item{f}{A \code{util} object.}
@@ -13,13 +13,13 @@ util_demand_hicksian(f, prices, utility, grad = FALSE, ...)
 
 \item{utility}{A scalar numeric of utility level.}
 
-\item{grad}{Logical input to return the gradient. By default, \code{FALSE}.}
+\item{gradient}{Logical input to return the gradient. By default, \code{FALSE}.}
 
 \item{...}{Additional arguments.}
 }
 \value{
-when \code{grad = FALSE}, a numeric vector of quantities. When
-\code{grad = TRUE}, a numeric matrix of gradients of quantities related to prices.
+when \code{gradient = FALSE}, a numeric vector of quantities. When
+\code{gradient = TRUE}, a numeric matrix of gradients of quantities related to prices.
 }
 \description{
 Hicksian demand function

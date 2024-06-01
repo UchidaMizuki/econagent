@@ -1,10 +1,10 @@
-util_demand_grad_numerical <- function (f, prices,
-                                        income = NULL,
-                                        utility = NULL,
-                                        h = 1e-6,
-                                        ...) {
+util_demand_gradient_numerical <- function (f, prices,
+                                            income = NULL,
+                                            utility = NULL,
+                                            h = 1e-6,
+                                            ...) {
   size <- length(prices)
-  grad <- matrix(NA_real_, size, size)
+  gradient <- matrix(NA_real_, size, size)
 
   for (i in seq_len(size)) {
     prices_plus <- prices_minus <- prices
@@ -19,19 +19,19 @@ util_demand_grad_numerical <- function (f, prices,
                                     income = income,
                                     utility = utility,
                                     ...)
-    grad[, i] <- (quantities_plus - quantities_minus) / (2 * h)
+    gradient[, i] <- (quantities_plus - quantities_minus) / (2 * h)
   }
-  grad
+  gradient
 }
 
-get_grad_quantities <- function(f, prices, income = NULL, utility = NULL, ...) {
-  grad_quantities_analytic <- util_demand(f, prices,
-                                          income = income,
-                                          utility = utility,
-                                          grad = TRUE)
-  grad_quantities_numerical <- util_demand_grad_numerical(f, prices,
-                                                          income = income,
-                                                          utility = utility)
-  list(analytic = grad_quantities_analytic,
-       numerical = grad_quantities_numerical)
+get_gradient_quantities <- function(f, prices, income = NULL, utility = NULL, ...) {
+  gradient_quantities_analytic <- util_demand(f, prices,
+                                              income = income,
+                                              utility = utility,
+                                              gradient = TRUE)
+  gradient_quantities_numerical <- util_demand_gradient_numerical(f, prices,
+                                                                  income = income,
+                                                                  utility = utility)
+  list(analytic = gradient_quantities_analytic,
+       numerical = gradient_quantities_numerical)
 }

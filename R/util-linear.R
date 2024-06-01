@@ -10,8 +10,8 @@
 util_linear <- function(efficiency = NA_real_,
                         weights = double()) {
   f <- function(quantities, efficiency, weights,
-                grad = FALSE) {
-    if (grad) {
+                gradient = FALSE) {
+    if (gradient) {
       efficiency * weights
     } else {
       efficiency * sum(weights * quantities)
@@ -26,17 +26,17 @@ util_linear <- function(efficiency = NA_real_,
 
 #' @export
 util_demand_marshallian.util_linear <- function(f, prices, income,
-                                                grad = FALSE,
+                                                gradient = FALSE,
                                                 ...) {
   rlang::check_dots_empty()
 
   loc_demand <- which.max(f$weights / prices)
   size <- length(prices)
 
-  if (grad) {
-    grad_quantities <- matrix(0, size, size)
-    grad_quantities[loc_demand, loc_demand] <- -income / prices[loc_demand] ^ 2
-    grad_quantities
+  if (gradient) {
+    gradient_quantities <- matrix(0, size, size)
+    gradient_quantities[loc_demand, loc_demand] <- -income / prices[loc_demand] ^ 2
+    gradient_quantities
   } else {
     quantities <- rep(0, size)
     quantities[loc_demand] <- income / prices[loc_demand]

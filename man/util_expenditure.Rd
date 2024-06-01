@@ -4,7 +4,7 @@
 \alias{util_expenditure}
 \title{Expenditure function}
 \usage{
-util_expenditure(f, prices, utility, grad = FALSE, ...)
+util_expenditure(f, prices, utility, gradient = FALSE, ...)
 }
 \arguments{
 \item{f}{A \code{util} object.}
@@ -13,13 +13,13 @@ util_expenditure(f, prices, utility, grad = FALSE, ...)
 
 \item{utility}{A scalar numeric of utility level.}
 
-\item{grad}{Logical input to return the gradient. By default, \code{FALSE}.}
+\item{gradient}{Logical input to return the gradient. By default, \code{FALSE}.}
 
 \item{...}{Additional arguments.}
 }
 \value{
-When \code{grad = FALSE}, a scalar numeric of expenditure. When
-\code{grad = TRUE}, a numeric vector of gradients of expenditure related to
+When \code{gradient = FALSE}, a scalar numeric of expenditure. When
+\code{gradient = TRUE}, a numeric vector of gradients of expenditure related to
 prices.
 }
 \description{

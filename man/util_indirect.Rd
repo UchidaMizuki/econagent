@@ -4,7 +4,7 @@
 \alias{util_indirect}
 \title{Indirect utility function}
 \usage{
-util_indirect(f, prices, income, grad = FALSE, ...)
+util_indirect(f, prices, income, gradient = FALSE, ...)
 }
 \arguments{
 \item{f}{A \code{util} object.}
@@ -13,13 +13,13 @@ util_indirect(f, prices, income, grad = FALSE, ...)
 
 \item{income}{A scalar numeric of income.}
 
-\item{grad}{Logical input to return the gradient. By default, \code{FALSE}.}
+\item{gradient}{Logical input to return the gradient. By default, \code{FALSE}.}
 
 \item{...}{Additional arguments.}
 }
 \value{
-When \code{grad = FALSE}, a scalar numeric of utility level. When
-\code{grad = TRUE}, a numeric vector of gradients of utility level related to
+When \code{gradient = FALSE}, a scalar numeric of utility level. When
+\code{gradient = TRUE}, a numeric vector of gradients of utility level related to
 prices.
 }
 \description{

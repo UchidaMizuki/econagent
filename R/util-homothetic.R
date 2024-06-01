@@ -1,7 +1,7 @@
 #' Create a new homothetic utility function
 #'
 #' @param f A function that returns the utility and its gradient.
-#' It has a `grad` argument that allows logical input.
+#' It has a `gradient` argument that allows logical input.
 #' @param ... Parameters to be passed to `f`.
 #' @param class Name of subclass.
 #'
@@ -16,13 +16,13 @@ new_util_homothetic <- function(f, ...,
 
 #' @export
 util_demand_hicksian.util_homothetic <- function(f, prices, utility,
-                                                 grad = FALSE,
+                                                 gradient = FALSE,
                                                  ...) {
   quantities <- util_demand_marshallian(f, prices, 1, ...)
 
-  if (grad) {
-    grad_quantities <- util_demand_marshallian(f, prices, 1, grad = TRUE, ...)
-    utility * sweep(grad_quantities, 1, (f(quantities) - quantities * f(quantities, grad = TRUE)) / f(quantities) ^ 2, "*")
+  if (gradient) {
+    gradient_quantities <- util_demand_marshallian(f, prices, 1, gradient = TRUE, ...)
+    utility * sweep(gradient_quantities, 1, (f(quantities) - quantities * f(quantities, gradient = TRUE)) / f(quantities) ^ 2, "*")
   } else {
     utility * quantities / f(quantities)
   }

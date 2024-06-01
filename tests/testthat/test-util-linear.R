@@ -13,12 +13,12 @@ test_that("util_linear() works", {
   # Marshallian demand
   income <- runif(1)
 
-  grad_quantities <- get_grad_quantities(f, prices, income = income)
-  expect_equal(grad_quantities$analytic, grad_quantities$numerical)
+  gradient_quantities <- get_gradient_quantities(f, prices, income = income)
+  expect_equal(gradient_quantities$analytic, gradient_quantities$numerical)
 
   # Hicksian demand
   utility <- runif(1)
 
-  grad_quantities <- get_grad_quantities(f, prices, utility = utility)
-  expect_equal(grad_quantities$analytic, grad_quantities$numerical)
+  gradient_quantities <- get_gradient_quantities(f, prices, utility = utility)
+  expect_equal(gradient_quantities$analytic, gradient_quantities$numerical)
 })

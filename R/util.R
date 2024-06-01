@@ -1,7 +1,7 @@
 #' Create a new utility function
 #'
 #' @param f A function that returns the utility and its gradient.
-#' It has a `grad` argument that allows logical input.
+#' It has a `gradient` argument that allows logical input.
 #' @param ... Parameters to be passed to `f`.
 #' @param class Name of subclass.
 #'
@@ -34,15 +34,15 @@ util_calibrate <- function(f, quantities, prices, ...) {
 #' @param f A `util` object.
 #' @param prices A numeric vector of prices.
 #' @param income A scalar numeric of income.
-#' @param grad Logical input to return the gradient. By default, `FALSE`.
+#' @param gradient Logical input to return the gradient. By default, `FALSE`.
 #' @param ... Additional arguments.
 #'
-#' @return when `grad = FALSE`, a numeric vector of quantities. When
-#' `grad = TRUE`, a numeric matrix of gradients of quantities related to prices.
+#' @return when `gradient = FALSE`, a numeric vector of quantities. When
+#' `gradient = TRUE`, a numeric matrix of gradients of quantities related to prices.
 #'
 #' @export
 util_demand_marshallian <- function(f, prices, income,
-                                    grad = FALSE,
+                                    gradient = FALSE,
                                     ...) {
   UseMethod("util_demand_marshallian")
 }
@@ -52,15 +52,15 @@ util_demand_marshallian <- function(f, prices, income,
 #' @param f A `util` object.
 #' @param prices A numeric vector of prices.
 #' @param utility A scalar numeric of utility level.
-#' @param grad Logical input to return the gradient. By default, `FALSE`.
+#' @param gradient Logical input to return the gradient. By default, `FALSE`.
 #' @param ... Additional arguments.
 #'
-#' @return when `grad = FALSE`, a numeric vector of quantities. When
-#' `grad = TRUE`, a numeric matrix of gradients of quantities related to prices.
+#' @return when `gradient = FALSE`, a numeric vector of quantities. When
+#' `gradient = TRUE`, a numeric matrix of gradients of quantities related to prices.
 #'
 #' @export
 util_demand_hicksian <- function(f, prices, utility,
-                                 grad = FALSE,
+                                 gradient = FALSE,
                                  ...) {
   UseMethod("util_demand_hicksian")
 }
@@ -76,27 +76,27 @@ util_demand_hicksian <- function(f, prices, utility,
 #' provided.
 #' @param utility A scalar numeric of utility level. If `NULL`, `income` must be
 #' provided.
-#' @param grad Logical input to return the gradient. By default, `FALSE`.
+#' @param gradient Logical input to return the gradient. By default, `FALSE`.
 #' @param ... Additional arguments.
 #'
-#' @return when `grad = FALSE`, a numeric vector of quantities. When
-#' `grad = TRUE`, a numeric matrix of gradients of quantities related to prices.
+#' @return when `gradient = FALSE`, a numeric vector of quantities. When
+#' `gradient = TRUE`, a numeric matrix of gradients of quantities related to prices.
 #'
 #' @export
 util_demand <- function(f, prices,
                         income = NULL,
                         utility = NULL,
-                        grad = FALSE,
+                        gradient = FALSE,
                         ...) {
   if (!is.null(income) && !is.null(utility)) {
     cli::cli_abort("Either {.arg income} or {.arg utility} must be NULL.")
   } else if (!is.null(income)) {
     util_demand_marshallian(f, prices, income,
-                            grad = grad,
+                            gradient = gradient,
                             ...)
   } else if (!is.null(utility)) {
     util_demand_hicksian(f, prices, utility,
-                         grad = grad,
+                         gradient = gradient,
                          ...)
   } else {
     cli::cli_abort("Either {.arg income} or {.arg utility} must be provided.")
@@ -108,19 +108,19 @@ util_demand <- function(f, prices,
 #' @param f A `util` object.
 #' @param prices A numeric vector of prices.
 #' @param utility A scalar numeric of utility level.
-#' @param grad Logical input to return the gradient. By default, `FALSE`.
+#' @param gradient Logical input to return the gradient. By default, `FALSE`.
 #' @param ... Additional arguments.
 #'
-#' @return When `grad = FALSE`, a scalar numeric of expenditure. When
-#' `grad = TRUE`, a numeric vector of gradients of expenditure related to
+#' @return When `gradient = FALSE`, a scalar numeric of expenditure. When
+#' `gradient = TRUE`, a numeric vector of gradients of expenditure related to
 #' prices.
 #'
 #' @export
 util_expenditure <- function(f, prices, utility,
-                             grad = FALSE,
+                             gradient = FALSE,
                              ...) {
-  if (grad) {
-    util_demand_hicksian(f, prices, utility, ...) + prices * util_demand_hicksian(f, prices, utility, grad = TRUE, ...)
+  if (gradient) {
+    util_demand_hicksian(f, prices, utility, ...) + prices * util_demand_hicksian(f, prices, utility, gradient = TRUE, ...)
   } else {
     sum(prices * util_demand_hicksian(f, prices, utility, ...))
   }
@@ -131,19 +131,19 @@ util_expenditure <- function(f, prices, utility,
 #' @param f A `util` object.
 #' @param prices A numeric vector of prices.
 #' @param income A scalar numeric of income.
-#' @param grad Logical input to return the gradient. By default, `FALSE`.
+#' @param gradient Logical input to return the gradient. By default, `FALSE`.
 #' @param ... Additional arguments.
 #'
-#' @return When `grad = FALSE`, a scalar numeric of utility level. When
-#' `grad = TRUE`, a numeric vector of gradients of utility level related to
+#' @return When `gradient = FALSE`, a scalar numeric of utility level. When
+#' `gradient = TRUE`, a numeric vector of gradients of utility level related to
 #' prices.
 #'
 #' @export
 util_indirect <- function(f, prices, income,
-                          grad = FALSE,
+                          gradient = FALSE,
                           ...) {
-  if (grad) {
-    f(util_demand_marshallian(f, prices, income), grad = TRUE) * util_demand_marshallian(f, prices, income, grad = TRUE)
+  if (gradient) {
+    f(util_demand_marshallian(f, prices, income), gradient = TRUE) * util_demand_marshallian(f, prices, income, gradient = TRUE)
   } else {
     f(util_demand_marshallian(f, prices, income))
   }

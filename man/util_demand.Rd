@@ -4,7 +4,7 @@
 \alias{util_demand}
 \title{Demand function}
 \usage{
-util_demand(f, prices, income = NULL, utility = NULL, grad = FALSE, ...)
+util_demand(f, prices, income = NULL, utility = NULL, gradient = FALSE, ...)
 }
 \arguments{
 \item{f}{A \code{util} object.}
@@ -17,13 +17,13 @@ provided.}
 \item{utility}{A scalar numeric of utility level. If \code{NULL}, \code{income} must be
 provided.}
 
-\item{grad}{Logical input to return the gradient. By default, \code{FALSE}.}
+\item{gradient}{Logical input to return the gradient. By default, \code{FALSE}.}
 
 \item{...}{Additional arguments.}
 }
 \value{
-when \code{grad = FALSE}, a numeric vector of quantities. When
-\code{grad = TRUE}, a numeric matrix of gradients of quantities related to prices.
+when \code{gradient = FALSE}, a numeric vector of quantities. When
+\code{gradient = TRUE}, a numeric matrix of gradients of quantities related to prices.
 }
 \description{
 This function works as Marshallian demand function when \code{income} is input, and
