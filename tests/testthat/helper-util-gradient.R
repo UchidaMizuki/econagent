@@ -41,9 +41,9 @@ test_util_indirect_gradient <- function(f, prices, income, ...) {
   expect_equal(analytic, numerical)
 }
 
-util_gradient_numerical <- function (f, quantities,
-                                     h = 1e-6,
-                                     ...) {
+util_gradient_numerical <- function(f, quantities,
+                                    h = 1e-6,
+                                    ...) {
   size <- length(quantities)
   gradient <- double(size)
 
@@ -59,11 +59,11 @@ util_gradient_numerical <- function (f, quantities,
   gradient
 }
 
-util_demand_gradient_numerical <- function (f, prices,
-                                            income = NULL,
-                                            utility = NULL,
-                                            h = 1e-6,
-                                            ...) {
+util_demand_gradient_numerical <- function(f, prices,
+                                           income = NULL,
+                                           utility = NULL,
+                                           h = 1e-6,
+                                           ...) {
   size <- length(prices)
   gradient <- matrix(NA_real_, size, size)
 
@@ -85,9 +85,9 @@ util_demand_gradient_numerical <- function (f, prices,
   gradient
 }
 
-util_expenditure_gradient_numerical <- function (f, prices, utility,
-                                                 h = 1e-6,
-                                                 ...) {
+util_expenditure_gradient_numerical <- function(f, prices, utility,
+                                                h = 1e-6,
+                                                ...) {
   size <- length(prices)
   gradient <- double(size)
 
@@ -103,9 +103,9 @@ util_expenditure_gradient_numerical <- function (f, prices, utility,
   gradient
 }
 
-util_indirect_gradient_numerical <- function (f, prices, income,
-                                              h = 1e-6,
-                                              ...) {
+util_indirect_gradient_numerical <- function(f, prices, income,
+                                             h = 1e-6,
+                                             ...) {
   size <- length(prices)
   gradient <- double(size)
 
