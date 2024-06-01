@@ -4,8 +4,12 @@
 \name{econgoods-package}
 \alias{econgoods}
 \alias{econgoods-package}
-\title{econgoods: What the Package Does (Title Case)}
+\title{econgoods: Utility Functions and Composite Goods in Economics}
 \description{
-More about what it does (maybe more than one line) Use four spaces when indenting paragraphs within the Description.
+Provides utility functions and composite goods for building economic models.
+}
+\author{
+\strong{Maintainer}: Mizuki Uchida \email{uchidamizuki@vivaldi.net}
+
 }
 \keyword{internal}
