@@ -4,14 +4,14 @@
 \alias{util_calibrate}
 \title{Calibrate a utility function}
 \usage{
-util_calibrate(f, quantities, prices, ...)
+util_calibrate(f, prices, quantities, ...)
 }
 \arguments{
 \item{f}{A \code{util} object.}
 
-\item{quantities}{A numeric vector of quantities.}
-
 \item{prices}{A numeric vector of prices.}
+
+\item{quantities}{A numeric vector of quantities.}
 
 \item{...}{Additional arguments.}
 }

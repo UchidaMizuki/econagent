@@ -18,14 +18,14 @@ new_util <- function(f, ...,
 #' Calibrate a utility function
 #'
 #' @param f A `util` object.
-#' @param quantities A numeric vector of quantities.
 #' @param prices A numeric vector of prices.
+#' @param quantities A numeric vector of quantities.
 #' @param ... Additional arguments.
 #'
 #' @return A `util` object with calibrated parameters.
 #'
 #' @export
-util_calibrate <- function(f, quantities, prices, ...) {
+util_calibrate <- function(f, prices, quantities, ...) {
   UseMethod("util_calibrate")
 }
 
@@ -120,7 +120,7 @@ util_expenditure <- function(f, prices, utility,
                              gradient = FALSE,
                              ...) {
   if (gradient) {
-    util_demand_hicksian(f, prices, utility, ...) + prices * util_demand_hicksian(f, prices, utility, gradient = TRUE, ...)
+    util_demand_hicksian(f, prices, utility, ...) + prices * colSums(util_demand_hicksian(f, prices, utility, gradient = TRUE, ...))
   } else {
     sum(prices * util_demand_hicksian(f, prices, utility, ...))
   }
@@ -143,7 +143,7 @@ util_indirect <- function(f, prices, income,
                           gradient = FALSE,
                           ...) {
   if (gradient) {
-    f(util_demand_marshallian(f, prices, income), gradient = TRUE) * util_demand_marshallian(f, prices, income, gradient = TRUE)
+    as.double(f(util_demand_marshallian(f, prices, income), gradient = TRUE) %*% util_demand_marshallian(f, prices, income, gradient = TRUE))
   } else {
     f(util_demand_marshallian(f, prices, income))
   }

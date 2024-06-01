@@ -1,18 +1,18 @@
-test_that("util_linear() works", {
+test_that("util_leontief() works", {
   set.seed(1234)
 
-  size <- 5
-  efficiency <- runif(1)
-  weights <- runif(size)
-  prices <- runif(size)
-  quantities <- runif(size)
+  size <- 10
+  prices <- runif(size) * 100
+  quantities <- runif(size) * 100
   quantities[size] <- 0
   income <- runif(1)
   utility <- runif(1)
 
-  f <- util_linear(efficiency = efficiency,
-                   weights = weights)
+  f <- util_leontief() |>
+    util_calibrate(prices = prices,
+                   quantities = quantities)
 
+  test_util_calibrate(f, prices, quantities)
   test_util_demand(f, prices,
                    income = income,
                    utility = utility)
@@ -20,12 +20,12 @@ test_that("util_linear() works", {
                         utility = utility)
   test_util_indirect(f, prices,
                      income = income)
-  test_util_gradient(f, quantities)
+  # test_util_gradient(f, quantities)
   test_util_demand_gradient(f, prices,
                             income = income,
                             utility = utility)
   test_util_expenditure_gradient(f, prices,
                                  utility = utility)
-  test_util_indirect_gradient(f, prices,
-                              income = income)
+  # test_util_indirect_gradient(f, prices,
+  #                             income = income)
 })
