@@ -1,4 +1,4 @@
-test_that("util_leontief() works", {
+test_that("Leontief utility works", {
   set.seed(1234)
 
   size <- 5

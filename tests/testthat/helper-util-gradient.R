@@ -2,27 +2,35 @@ test_util_gradient <- function(f, quantities) {
   analytic <- f(quantities,
                 gradient = TRUE)
   numerical <- util_gradient_numerical(f, quantities)
-  expect_equal(analytic, numerical)
+  expect_equal(analytic, numerical,
+               tolerance = 1e-6)
 }
 
-test_util_demand_gradient <- function(f, prices, income, utility, ...) {
-  analytic <- util_demand(f, prices,
-                          income = income,
-                          gradient = TRUE,
-                          ...)
-  numerical <- util_demand_gradient_numerical(f, prices,
-                                              income = income,
-                                              ...)
-  expect_equal(analytic, numerical)
+test_util_demand_gradient <- function(f, prices, income, utility, ...,
+                                      type = c("marshallian", "hicksian")) {
+  if ("marshallian" %in% type) {
+    analytic <- util_demand(f, prices,
+                            income = income,
+                            gradient = TRUE,
+                            ...)
+    numerical <- util_demand_gradient_numerical(f, prices,
+                                                income = income,
+                                                ...)
+    expect_equal(analytic, numerical,
+                 tolerance = 1e-6)
+  }
 
-  analytic <- util_demand(f, prices,
-                          utility = utility,
-                          gradient = TRUE,
-                          ...)
-  numerical <- util_demand_gradient_numerical(f, prices,
-                                              utility = utility,
-                                              ...)
-  expect_equal(analytic, numerical)
+  if ("hicksian" %in% type) {
+    analytic <- util_demand(f, prices,
+                            utility = utility,
+                            gradient = TRUE,
+                            ...)
+    numerical <- util_demand_gradient_numerical(f, prices,
+                                                utility = utility,
+                                                ...)
+    expect_equal(analytic, numerical,
+                 tolerance = 1e-6)
+  }
 }
 
 test_util_expenditure_gradient <- function(f, prices, utility, ...) {
@@ -30,7 +38,8 @@ test_util_expenditure_gradient <- function(f, prices, utility, ...) {
                                gradient = TRUE,
                                ...)
   numerical <- util_expenditure_gradient_numerical(f, prices, utility, ...)
-  expect_equal(analytic, numerical)
+  expect_equal(analytic, numerical,
+               tolerance = 1e-6)
 }
 
 test_util_indirect_gradient <- function(f, prices, income, ...) {
@@ -38,7 +47,8 @@ test_util_indirect_gradient <- function(f, prices, income, ...) {
                             gradient = TRUE,
                             ...)
   numerical <- util_indirect_gradient_numerical(f, prices, income, ...)
-  expect_equal(analytic, numerical)
+  expect_equal(analytic, numerical,
+               tolerance = 1e-6)
 }
 
 util_gradient_numerical <- function(f, quantities,

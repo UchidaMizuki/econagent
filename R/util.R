@@ -10,8 +10,8 @@
 #' @export
 new_util <- function(f, ...,
                      class = character()) {
-  args <- rlang::list2(...)
-  partialised::new_partialised(f, args,
+  dots <- rlang::list2(...)
+  partialised::new_partialised(f, dots,
                                class = c(class, "util"))
 }
 
@@ -63,6 +63,31 @@ util_demand_hicksian <- function(f, prices, utility,
                                  gradient = FALSE,
                                  ...) {
   UseMethod("util_demand_hicksian")
+}
+
+#' @export
+util_demand_hicksian.util <- function(f, prices, utility,
+                                      gradient = FALSE,
+                                      interval = c(1e-6, 1e6),
+                                      tol = 1e-6,
+                                      ...) {
+  income <- stats::uniroot(\(income, ...) util_indirect(f, prices, income, ...) - utility,
+                           interval = interval,
+                           extendInt = "yes",
+                           tol = tol,
+                           ...)$root
+
+  dots <- rlang::list2(...)
+  dots <- dots[!names(dots) %in% rlang::fn_fmls_names(stats::uniroot)]
+
+  quantities <- rlang::exec(util_demand_marshallian, f, prices, income, !!!dots)
+
+  if (gradient) {
+    # TODO: Implement gradient
+    cli::cli_abort("Gradient is not available.")
+  } else {
+    quantities
+  }
 }
 
 #' Demand function
@@ -144,8 +169,9 @@ util_indirect <- function(f, prices, income,
                           gradient = FALSE,
                           ...) {
   if (gradient) {
-    as.double(f(util_demand_marshallian(f, prices, income), gradient = TRUE) %*% util_demand_marshallian(f, prices, income, gradient = TRUE))
+    as.double(f(util_demand_marshallian(f, prices, income), gradient = TRUE, ...) %*%
+                util_demand_marshallian(f, prices, income, gradient = TRUE, ...))
   } else {
-    f(util_demand_marshallian(f, prices, income))
+    f(util_demand_marshallian(f, prices, income, ...))
   }
 }

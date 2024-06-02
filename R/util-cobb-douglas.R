@@ -10,7 +10,7 @@
 #' @export
 util_cobb_douglas <- function(efficiency = NA_real_,
                               weights = double(),
-                              homothetic = TRUE) {
+                              homothetic = length(weights) == 0 || sum(weights) == 1) {
   check_efficiency_nonnegative(efficiency)
   check_weights_nonnegative(weights)
 
@@ -18,7 +18,7 @@ util_cobb_douglas <- function(efficiency = NA_real_,
                 gradient = FALSE) {
     if (gradient) {
       gradient_utility <- efficiency * prod(quantities ^ weights, na.rm = TRUE) * weights / quantities
-      gradient_utility[is.nan(gradient_utility)] <- 0
+      gradient_utility[quantities == 0] <- 0
       gradient_utility
     } else {
       efficiency * prod(quantities ^ weights, na.rm = TRUE)
@@ -26,7 +26,7 @@ util_cobb_douglas <- function(efficiency = NA_real_,
   }
 
   if (homothetic) {
-    if (!rlang::is_empty(weights) && sum(weights) != 1) {
+    if (length(weights) > 0 && sum(weights) != 1) {
       cli::cli_abort("The sum of {.code weights} must be equal to 1.")
     }
 
@@ -47,7 +47,7 @@ util_calibrate.util_cobb_douglas <- function(f, prices, quantities, ...) {
   rlang::check_dots_empty()
 
   if (!inherits(f, "util_homothetic")) {
-    cli::cli_abort("The utility function must be homothetic.")
+    cli::cli_abort("The utility function {.arg f} must be homothetic.")
   }
 
   weights <- prices * quantities
@@ -69,4 +69,14 @@ util_demand_marshallian.util_cobb_douglas <- function(f, prices, income,
   } else {
     income * f$weights / sum(f$weights) / prices
   }
+}
+
+#' @export
+type_sum.util_cobb_douglas <- function(x) {
+  "Cobb-Douglas"
+}
+
+#' @export
+obj_sum.util_cobb_douglas <- function(x) {
+  type_sum(x)
 }

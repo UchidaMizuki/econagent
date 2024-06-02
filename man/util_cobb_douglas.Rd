@@ -4,7 +4,11 @@
 \alias{util_cobb_douglas}
 \title{Cobb-Douglas utility function}
 \usage{
-util_cobb_douglas(efficiency = NA_real_, weights = double(), homothetic = TRUE)
+util_cobb_douglas(
+  efficiency = NA_real_,
+  weights = double(),
+  homothetic = length(weights) == 0 || sum(weights) == 1
+)
 }
 \arguments{
 \item{efficiency}{A scalar numeric of efficiency parameter. By default,

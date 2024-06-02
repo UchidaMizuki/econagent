@@ -1,4 +1,4 @@
-test_that("util_linear() works", {
+test_that("Linear utility works", {
   set.seed(1234)
 
   size <- 5

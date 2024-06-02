@@ -64,11 +64,11 @@ util_demand_hicksian.util_leontief <- function(f, prices, utility,
 }
 
 #' @export
-type_sum.util_leontief <- function(x, ...) {
+type_sum.util_leontief <- function(x) {
   "Leontief"
 }
 
 #' @export
-obj_sum.util_leontief <- function(x, ...) {
+obj_sum.util_leontief <- function(x) {
   type_sum(x)
 }

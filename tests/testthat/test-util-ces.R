@@ -1,4 +1,4 @@
-test_that("Homothetic Cobb-Douglas utility works", {
+test_that("Homothetic CES utility works", {
   set.seed(1234)
 
   size <- 5
@@ -8,7 +8,8 @@ test_that("Homothetic Cobb-Douglas utility works", {
   income <- runif(1)
   utility <- runif(1)
 
-  f <- util_cobb_douglas() |>
+  substitution <- runif(1)
+  f <- util_ces(substitution) |>
     util_calibrate(prices = prices,
                    quantities = quantities)
 
@@ -30,7 +31,7 @@ test_that("Homothetic Cobb-Douglas utility works", {
                               income = income)
 })
 
-test_that("Non-homothetic Cobb-Douglas utility works", {
+test_that("Non-homothetic CES utility works", {
   set.seed(1234)
 
   size <- 5
@@ -40,12 +41,16 @@ test_that("Non-homothetic Cobb-Douglas utility works", {
   income <- runif(1)
   utility <- runif(1)
 
+  substitution <- runif(1)
+  homogeneity <- runif(1)
   efficiency <- runif(1)
   weights <- runif(size)
   weights[quantities == 0] <- 0
 
-  f <- util_cobb_douglas(efficiency = efficiency,
-                         weights = weights)
+  f <- util_ces(substitution,
+                homogeneity = homogeneity,
+                efficiency = efficiency,
+                weights = weights)
 
   test_util_demand(f, prices,
                    income = income,
