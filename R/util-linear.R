@@ -9,6 +9,9 @@
 #' @export
 util_linear <- function(efficiency = NA_real_,
                         weights = double()) {
+  check_efficiency_nonnegative(efficiency)
+  check_weights_nonnegative(weights)
+
   f <- function(quantities, efficiency, weights,
                 gradient = FALSE) {
     if (gradient) {

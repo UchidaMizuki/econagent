@@ -22,8 +22,10 @@ util_demand_hicksian.util_homothetic <- function(f, prices, utility,
 
   if (gradient) {
     gradient_quantities <- util_demand_marshallian(f, prices, 1, gradient = TRUE, ...)
-    utility * sweep(gradient_quantities, 1, (f(quantities) - quantities * f(quantities, gradient = TRUE)) / f(quantities) ^ 2, "*")
+
+    sweep(gradient_quantities, 1, utility / f(quantities), "*") +
+      outer(quantities, as.double(-utility / f(quantities) ^ 2 * f(quantities, gradient = TRUE) %*% gradient_quantities))
   } else {
-    utility * quantities / f(quantities)
+    quantities * utility / f(quantities)
   }
 }

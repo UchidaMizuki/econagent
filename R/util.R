@@ -120,7 +120,8 @@ util_expenditure <- function(f, prices, utility,
                              gradient = FALSE,
                              ...) {
   if (gradient) {
-    util_demand_hicksian(f, prices, utility, ...) + prices * colSums(util_demand_hicksian(f, prices, utility, gradient = TRUE, ...))
+    util_demand_hicksian(f, prices, utility, ...) +
+      as.double(prices %*% util_demand_hicksian(f, prices, utility, gradient = TRUE, ...))
   } else {
     sum(prices * util_demand_hicksian(f, prices, utility, ...))
   }

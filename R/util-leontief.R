@@ -9,10 +9,13 @@
 #' @export
 util_leontief <- function(efficiency = NA_real_,
                           weights = double()) {
+  check_efficiency_nonnegative(efficiency)
+  check_weights_nonnegative(weights)
+
   f <- function(quantities, efficiency, weights,
                 gradient = FALSE) {
     if (gradient) {
-      rlang::abort("Gradient not available.")
+      cli::cli_abort("{.code gradient == TRUE} is not supported for Leontief utility function.")
     } else {
       efficiency * min(quantities / weights, na.rm = TRUE)
     }

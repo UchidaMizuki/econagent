@@ -1,4 +1,4 @@
-test_that("util_leontief() works", {
+test_that("util_cobb_douglas() works", {
   set.seed(1234)
 
   size <- 5
@@ -8,7 +8,7 @@ test_that("util_leontief() works", {
   income <- runif(1)
   utility <- runif(1)
 
-  f <- util_leontief() |>
+  f <- util_cobb_douglas() |>
     util_calibrate(prices = prices,
                    quantities = quantities)
 
@@ -20,12 +20,12 @@ test_that("util_leontief() works", {
                         utility = utility)
   test_util_indirect(f, prices,
                      income = income)
-  # test_util_gradient(f, quantities)
+  test_util_gradient(f, quantities)
   test_util_demand_gradient(f, prices,
                             income = income,
                             utility = utility)
   test_util_expenditure_gradient(f, prices,
                                  utility = utility)
-  # test_util_indirect_gradient(f, prices,
-  #                             income = income)
+  test_util_indirect_gradient(f, prices,
+                              income = income)
 })
