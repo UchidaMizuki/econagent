@@ -6,7 +6,7 @@ test_that("Linear utility works", {
   weights <- runif(size)
   prices <- runif(size)
   quantities <- runif(size)
-  quantities[size] <- 0
+  quantities[[size]] <- 0
   income <- runif(1)
   utility <- runif(1)
 

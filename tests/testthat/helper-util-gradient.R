@@ -59,12 +59,12 @@ util_gradient_numerical <- function(f, quantities,
 
   for (i in seq_len(size)) {
     quantities_plus <- quantities_minus <- quantities
-    quantities_plus[i] <- quantities_plus[i] + h
-    quantities_minus[i] <- quantities_minus[i] - h
+    quantities_plus[[i]] <- quantities_plus[[i]] + h
+    quantities_minus[[i]] <- quantities_minus[[i]] - h
 
     utility_plus <- f(quantities_plus, ...)
     utility_minus <- f(quantities_minus, ...)
-    gradient[i] <- (utility_plus - utility_minus) / (2 * h)
+    gradient[[i]] <- (utility_plus - utility_minus) / (2 * h)
   }
   gradient
 }
@@ -79,8 +79,8 @@ util_demand_gradient_numerical <- function(f, prices,
 
   for (i in seq_len(size)) {
     prices_plus <- prices_minus <- prices
-    prices_plus[i] <- prices_plus[i] + h
-    prices_minus[i] <- prices_minus[i] - h
+    prices_plus[[i]] <- prices_plus[[i]] + h
+    prices_minus[[i]] <- prices_minus[[i]] - h
 
     quantities_plus <- util_demand(f, prices_plus,
                                    income = income,
@@ -103,12 +103,12 @@ util_expenditure_gradient_numerical <- function(f, prices, utility,
 
   for (i in seq_len(size)) {
     prices_plus <- prices_minus <- prices
-    prices_plus[i] <- prices_plus[i] + h
-    prices_minus[i] <- prices_minus[i] - h
+    prices_plus[[i]] <- prices_plus[[i]] + h
+    prices_minus[[i]] <- prices_minus[[i]] - h
 
     expenditure_plus <- util_expenditure(f, prices_plus, utility, ...)
     expenditure_minus <- util_expenditure(f, prices_minus, utility, ...)
-    gradient[i] <- (expenditure_plus - expenditure_minus) / (2 * h)
+    gradient[[i]] <- (expenditure_plus - expenditure_minus) / (2 * h)
   }
   gradient
 }
@@ -121,12 +121,12 @@ util_indirect_gradient_numerical <- function(f, prices, income,
 
   for (i in seq_len(size)) {
     prices_plus <- prices_minus <- prices
-    prices_plus[i] <- prices_plus[i] + h
-    prices_minus[i] <- prices_minus[i] - h
+    prices_plus[[i]] <- prices_plus[[i]] + h
+    prices_minus[[i]] <- prices_minus[[i]] - h
 
     utility_plus <- util_indirect(f, prices_plus, income, ...)
     utility_minus <- util_indirect(f, prices_minus, income, ...)
-    gradient[i] <- (utility_plus - utility_minus) / (2 * h)
+    gradient[[i]] <- (utility_plus - utility_minus) / (2 * h)
   }
   gradient
 }

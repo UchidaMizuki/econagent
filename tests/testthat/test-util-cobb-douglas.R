@@ -4,7 +4,7 @@ test_that("Homothetic Cobb-Douglas utility works", {
   size <- 5
   prices <- runif(size)
   quantities <- runif(size)
-  quantities[size] <- 0
+  quantities[[size]] <- 0
   income <- runif(1)
   utility <- runif(1)
 
@@ -36,7 +36,7 @@ test_that("Non-homothetic Cobb-Douglas utility works", {
   size <- 5
   prices <- runif(size)
   quantities <- runif(size)
-  quantities[size] <- 0
+  quantities[[size]] <- 0
   income <- runif(1)
   utility <- runif(1)
 
