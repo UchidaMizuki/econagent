@@ -28,10 +28,12 @@ library(tidyverse)
 ### Calibrate utility functions
 
 - Utility functions:
-  - Cobb-Douglas: `util_cobb_douglas()`
-  - Leontief: `util_leontief()`
-  - Constant elasticity of substitution (CES): `util_ces()`
-- Calibrate: `util_calibrate()`
+  - `util_cobb_douglas()`: Cobb-Douglas utility function
+  - `util_leontief()`: Leontief utility function
+  - `util_ces()`: Constant elasticity of substitution (CES) utility
+    function
+- `util_calibrate()`: Fit parameters of utility functions to the given
+  prices and quantities.
 
 ``` r
 # Sample data
@@ -76,8 +78,6 @@ leontief
 ```
 
 ``` r
-ces_0_75 <- util_ces(substitution = 0.75) |> 
-  util_calibrate(prices, quantities)
 ces_minus_1_5 <- util_ces(substitution = -1.5) |> 
   util_calibrate(prices, quantities)
 ces_minus_1_5
@@ -103,86 +103,17 @@ ces_minus_1_5
 - `util_2goods_budget()` returns the function of budget line.
 
 ``` r
-# You need to install dev version of geomtextpath
-# - https://github.com/AllanCameron/geomtextpath/issues/114
-library(geomtextpath)
-
-theme_set(theme_bw())
-
-limits <- c(0, max(income / prices))
-stat_2goods_indifference <- function(f, ...) {
-  stat_function(geom = "textpath",
-                fun = \(x) util_2goods_indifference(f, quantities)(x) |> 
-                  replace_na(1e6),
-                label = pillar::obj_sum(f) |> 
-                  # https://github.com/AllanCameron/geomtextpath/issues/75
-                  str_replace_all("-", "\u2212"),
-                hjust = 1,
-                xlim = limits,
-                ...)
-}
-stat_2goods_budget <- function(...) {
-  stat_function(geom = "textpath",
-                fun = util_2goods_budget(prices, income),
-                label = "Budget line",
-                hjust = 0.2,
-                xlim = c(0, income / prices[1]),
-                ...)
-}
-geom_quantities <- function(...) {
-  geom_point(aes(quantities[[1]], quantities[[2]]),
-             ...)
-}
-ggplot() +
-  geom_hline(yintercept = 0,
-             color = "dimgray") +
-  geom_vline(xintercept = 0,
-             color = "dimgray") +
-  stat_2goods_indifference(cobb_douglas,
-                           color = "red4") +
-  stat_2goods_indifference(leontief,
-                           n = 201,
-                           color = "red4") +
-  stat_2goods_indifference(ces_minus_1_5,
-                           color = "red4") +
-  stat_2goods_budget(color = "blue4") +
-  geom_quantities(color = "blue4",
-                  size = 2) +
-  scale_x_continuous("Quantity of good X") +
-  scale_y_continuous("Quantity of good Y") +
-  tune::coord_obs_pred(xlim = limits,
-                       ylim = limits)
+util_2goods_indifference(cobb_douglas, quantities)(1:6)
+#> [1] 8.0000000 2.0000000 0.8888889 0.5000000 0.3200000 0.2222222
 ```
-
-<img src="man/figures/README-plot-indifference-curve-and-budget-line-1.png" width="100%" />
 
 ``` r
-get_data_2goods_utility <- function(f) {
-  f |> 
-    purrr::map(
-      \(f) {
-        expand_grid(x = seq(0, limits[[2]], length.out = 100),
-                    y = seq(0, limits[[2]], length.out = 100)) |>
-          rowwise() |> 
-          mutate(z = f(c(x, y))) |> 
-          ungroup()
-      }
-    ) |> 
-    set_names(map_chr(f, pillar::obj_sum)) |> 
-    bind_rows(.id = "utility") |> 
-    mutate(across(utility, as_factor))
-}
-
-get_data_2goods_utility(c(leontief, ces_minus_1_5, cobb_douglas, ces_0_75)) |> 
-  ggplot(aes(x, y)) +
-  geom_contour_filled(aes(z = z)) +
-  stat_2goods_budget(color = "white") +
-  geom_quantities(color = "white") +
-  scale_x_continuous("Quantity of good X") +
-  scale_y_continuous("Quantity of good Y") +
-  facet_wrap(~ utility,
-             ncol = 2) +
-  tune::coord_obs_pred()
+util_2goods_budget(prices, income)(1:6)
+#> [1]  4  2  0 -2 -4 -6
 ```
+
+#### Advanced plotting examples
+
+<img src="man/figures/README-plot-indifference-curve-and-budget-line-1.png" width="100%" />
 
 <img src="man/figures/README-plot-utility-level-1.png" width="100%" />

@@ -41,10 +41,11 @@ library(tidyverse)
 ### Calibrate utility functions
 
 - Utility functions:
-  - Cobb-Douglas: `util_cobb_douglas()`
-  - Leontief: `util_leontief()`
-  - Constant elasticity of substitution (CES): `util_ces()`
-- Calibrate: `util_calibrate()`
+  - `util_cobb_douglas()`: Cobb-Douglas utility function
+  - `util_leontief()`: Leontief utility function
+  - `util_ces()`: Constant elasticity of substitution (CES) utility function
+- `util_calibrate()`: Fit parameters of utility functions to the given prices 
+and quantities.
 
 ```{r calibrate-utility-functions-sample-data}
 # Sample data
@@ -63,8 +64,6 @@ cobb_douglas
 leontief <- util_leontief() |> 
   util_calibrate(prices, quantities)
 leontief
-ces_0_75 <- util_ces(substitution = 0.75) |> 
-  util_calibrate(prices, quantities)
 ces_minus_1_5 <- util_ces(substitution = -1.5) |> 
   util_calibrate(prices, quantities)
 ces_minus_1_5
@@ -75,7 +74,13 @@ ces_minus_1_5
 - `util_2goods_indifference()` returns the function of indifference curve.
 - `util_2goods_budget()` returns the function of budget line.
 
-```{r plot-indifference-curve-and-budget-line}
+```{r}
+util_2goods_indifference(cobb_douglas, quantities)(1:6)
+util_2goods_budget(prices, income)(1:6)
+```
+#### Advanced plotting examples
+
+```{r plot-indifference-curve-and-budget-line, echo=FALSE}
 # You need to install dev version of geomtextpath
 # - https://github.com/AllanCameron/geomtextpath/issues/114
 library(geomtextpath)
@@ -127,7 +132,9 @@ ggplot() +
                        ylim = limits)
 ```
 
-```{r, plot-utility-level, warning=FALSE, fig.width=7, fig.height=6}
+```{r, plot-utility-level, warning=FALSE, fig.width=7, fig.height=6, echo=FALSE}
+ces_0_75 <- util_ces(substitution = 0.75) |> 
+  util_calibrate(prices, quantities)
 get_data_2goods_utility <- function(f) {
   f |> 
     purrr::map(
@@ -143,7 +150,6 @@ get_data_2goods_utility <- function(f) {
     bind_rows(.id = "utility") |> 
     mutate(across(utility, as_factor))
 }
-
 get_data_2goods_utility(c(leontief, ces_minus_1_5, cobb_douglas, ces_0_75)) |> 
   ggplot(aes(x, y)) +
   geom_contour_filled(aes(z = z)) +
