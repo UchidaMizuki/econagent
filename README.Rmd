@@ -1,9 +1,9 @@
 ---
-output: github_document
+  output: github_document
 ---
-
+  
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
+  
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -18,20 +18,21 @@ knitr::opts_chunk$set(
 # econgoods
 
 <!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
-
+  
 econgoods provides utility functions and composite goods in economics.
 
 ## Installation
 
 You can install the development version of econgoods from [GitHub](https://github.com/) with:
-
+  
 ``` r
 # install.packages("devtools")
 devtools::install_github("UchidaMizuki/econgoods")
 ```
 
-## Examples
+## Examples for utility functions
 
 ```{r load-libraries, message=FALSE, warning=FALSE}
 library(econgoods)
@@ -49,12 +50,12 @@ and quantities.
 
 ```{r calibrate-utility-functions-sample-data}
 # Sample data
-prices <- c(2, 1)
-income <- 6
+prices <- c(4, 2)
+income <- 12
 
-x <- 2
-y <- util_2goods_budget(prices, income)(x)
-quantities <- c(x, y)
+quantity_x <- 2
+quantity_y <- util_2goods_budget(prices, income)(quantity_x)
+quantities <- c(quantity_x, quantity_y)
 ```
 
 ```{r calibrate-utility-functions}
@@ -74,11 +75,12 @@ ces_minus_1_5
 - `util_2goods_indifference()` returns the function of indifference curve.
 - `util_2goods_budget()` returns the function of budget line.
 
-```{r}
+```{r indifference-curve-and-budget-line}
 util_2goods_indifference(cobb_douglas, quantities)(1:6)
 util_2goods_budget(prices, income)(1:6)
 ```
-#### Advanced plotting examples
+
+#### Sample plots
 
 ```{r plot-indifference-curve-and-budget-line, echo=FALSE}
 # You need to install dev version of geomtextpath
@@ -88,26 +90,44 @@ library(geomtextpath)
 theme_set(theme_bw())
 
 limits <- c(0, max(income / prices))
-stat_2goods_indifference <- function(f, ...) {
-  stat_function(geom = "textpath",
-                fun = \(x) util_2goods_indifference(f, quantities)(x) |> 
-                  replace_na(1e6),
-                label = pillar::obj_sum(f) |> 
-                  # https://github.com/AllanCameron/geomtextpath/issues/75
-                  str_replace_all("-", "\u2212"),
-                hjust = 1,
-                xlim = limits,
-                ...)
+stat_indifference <- function(f, quantities,
+                              label = pillar::obj_sum(f) |> 
+                                # https://github.com/AllanCameron/geomtextpath/issues/75
+                                str_replace_all("-", "\u2212"),
+                              ...) {
+  fun <- util_2goods_indifference(f, quantities, otherwise = 1e6)
+  if (is.null(label)) {
+    stat_function(fun = fun,
+                  xlim = limits,
+                  ...)
+  } else {
+    stat_function(geom = "textpath",
+                  fun = fun,
+                  label = label,
+                  hjust = 1,
+                  xlim = limits,
+                  ...) 
+  }
 }
-stat_2goods_budget <- function(...) {
-  stat_function(geom = "textpath",
-                fun = util_2goods_budget(prices, income),
-                label = "Budget line",
-                hjust = 0.2,
-                xlim = c(0, income / prices[1]),
-                ...)
+stat_2goods_budget <- function(prices, income, 
+                               label = "Budget line",
+                               ...) {
+  xlim <- c(0, income / prices[1])
+  fun <- util_2goods_budget(prices, income)
+  if (is.null(label)) {
+    stat_function(fun = fun,
+                  xlim = xlim,
+                  ...)
+  } else {
+    stat_function(geom = "textpath",
+                  fun = fun,
+                  label = label,
+                  hjust = 0.2,
+                  xlim = xlim,
+                  ...)
+  }
 }
-geom_quantities <- function(...) {
+geom_point_quantities <- function(quantities, ...) {
   geom_point(aes(quantities[[1]], quantities[[2]]),
              ...)
 }
@@ -116,16 +136,18 @@ ggplot() +
              color = "dimgray") +
   geom_vline(xintercept = 0,
              color = "dimgray") +
-  stat_2goods_indifference(cobb_douglas,
-                           color = "red4") +
-  stat_2goods_indifference(leontief,
-                           n = 201,
-                           color = "red4") +
-  stat_2goods_indifference(ces_minus_1_5,
-                           color = "red4") +
-  stat_2goods_budget(color = "blue4") +
-  geom_quantities(color = "blue4",
-                  size = 2) +
+  stat_indifference(cobb_douglas, quantities,
+                    color = "red4") +
+  stat_indifference(leontief, quantities,
+                    n = 201,
+                    color = "red4") +
+  stat_indifference(ces_minus_1_5, quantities,
+                    color = "red4") +
+  stat_2goods_budget(prices, income,
+                     color = "blue4") +
+  geom_point_quantities(quantities,
+                        color = "blue4",
+                        size = 2) +
   scale_x_continuous("Quantity of good X") +
   scale_y_continuous("Quantity of good Y") +
   tune::coord_obs_pred(xlim = limits,
@@ -139,25 +161,175 @@ get_data_2goods_utility <- function(f) {
   f |> 
     purrr::map(
       \(f) {
-        expand_grid(x = seq(0, limits[[2]], length.out = 100),
-                    y = seq(0, limits[[2]], length.out = 100)) |>
+        expand_grid(quantity_x = seq(0, limits[[2]], length.out = 100),
+                    quantity_y = seq(0, limits[[2]], length.out = 100)) |>
           rowwise() |> 
-          mutate(z = f(c(x, y))) |> 
+          mutate(utility = f(c(quantity_x, quantity_y))) |> 
           ungroup()
       }
     ) |> 
     set_names(map_chr(f, pillar::obj_sum)) |> 
-    bind_rows(.id = "utility") |> 
-    mutate(across(utility, as_factor))
+    bind_rows(.id = "utility_type") |> 
+    mutate(across(utility_type, as_factor))
 }
 get_data_2goods_utility(c(leontief, ces_minus_1_5, cobb_douglas, ces_0_75)) |> 
-  ggplot(aes(x, y)) +
-  geom_contour_filled(aes(z = z)) +
-  stat_2goods_budget(color = "white") +
-  geom_quantities(color = "white") +
+  ggplot(aes(quantity_x, quantity_y)) +
+  geom_contour_filled(aes(z = utility),
+                      binwidth = 4) +
+  stat_2goods_budget(prices, income,
+                     color = "white") +
+  geom_point_quantities(quantities,
+                        color = "white") +
   scale_x_continuous("Quantity of good X") +
   scale_y_continuous("Quantity of good Y") +
-  facet_wrap(~ utility,
+  scale_fill_viridis_d("Utility") +
+  facet_wrap(~ utility_type,
              ncol = 2) +
   tune::coord_obs_pred()
 ```
+
+### Marginal utility for two goods
+
+- `util_2goods_utility()` returns the function of total utility or marginal utility
+  - `gradient = FALSE`: Total utility (default)
+  - `gradient = TRUE`: Marginal utility
+
+```{r marginal-utility}
+# Total utility
+util_2goods_utility(cobb_douglas, quantities[[2]])(1:6)
+# Marginal utility
+util_2goods_utility(cobb_douglas, quantities[[2]], gradient = TRUE)(1:6)
+```
+#### Sample plots
+
+```{r plot-marginal-utility, echo=FALSE, fig.width=7, fig.height=3, warning=FALSE}
+library(patchwork)
+
+stat_utility <- function(f, 
+                         gradient = FALSE,
+                         label = pillar::obj_sum(f) |> 
+                           # https://github.com/AllanCameron/geomtextpath/issues/75
+                           str_replace_all("-", "\u2212"),
+                         ...) {
+  if (gradient) {
+    fun <- util_2goods_utility(f, quantities[[2]], gradient = TRUE)
+  } else {
+    fun <- util_2goods_utility(f, quantities[[2]])
+  }
+  if (is.null(label)) {
+    stat_function(fun = fun,
+                  xlim = limits,
+                  ...)
+  } else {
+    stat_function(geom = "textpath",
+                  fun = fun,
+                  label = label,
+                  hjust = 1,
+                  xlim = limits,
+                  ...) 
+  }
+}
+
+color <- RColorBrewer::brewer.pal(4, "Dark2")
+plot_total_utility <- ggplot() +
+  stat_utility(leontief,
+               color = color[[1]]) +
+  stat_utility(ces_minus_1_5,
+               color = color[[2]]) +
+  stat_utility(cobb_douglas,
+               color = color[[3]]) +
+  scale_x_continuous("Quantity of good X",
+                     limits = c(1e-3, NA)) +
+  scale_y_continuous("Total utility")
+plot_marginal_utility <- ggplot() +
+  stat_utility(leontief,
+               gradient = TRUE,
+               n = 201,
+               color = color[[1]]) +
+  stat_utility(ces_minus_1_5,
+               gradient = TRUE,
+               color = color[[2]]) +
+  stat_utility(cobb_douglas,
+               gradient = TRUE,
+               color = color[[3]]) +
+  scale_x_continuous("Quantity of good X",
+                     limits = c(1e-3, NA)) +
+  scale_y_continuous("Marginal utility of good X")
+
+plot_total_utility + plot_marginal_utility
+```
+
+### Price effect for two goods
+
+```{r price-effect}
+prices_new <- c(2, 2)
+
+# Price effect
+quantities_new <- util_demand(cobb_douglas, prices_new,
+                              income = income)
+quantities_new
+# Substitution effect
+quantities_substitution <- util_demand(cobb_douglas, prices_new,
+                                       utility = cobb_douglas(quantities))
+quantities_substitution
+# Income effect
+quantities_new - quantities_substitution
+```
+
+#### Sample plots
+
+```{r plot-price-effect, echo=FALSE}
+geom_text_quantities <- function(quantities,
+                                 label = str_c("(", 
+                                               scales::label_number(accuracy = 1e-2)(quantities[[1]]), 
+                                               ", ", 
+                                               scales::label_number(accuracy = 1e-2)(quantities[[2]]), 
+                                               ")"),
+                                 hjust = -0.2,
+                                 ...) {
+  geom_text(aes(quantities[[1]], quantities[[2]]),
+            label = label,
+            hjust = hjust,
+            ...)
+}
+
+ggplot() +
+  geom_hline(yintercept = 0,
+             color = "dimgray") +
+  geom_vline(xintercept = 0,
+             color = "dimgray") +
+  stat_indifference(cobb_douglas, quantities,
+                    color = "red4") +
+  stat_indifference(cobb_douglas, quantities_new,
+                    label = NULL,
+                    color = "red4") +
+  stat_2goods_budget(prices, income,
+                     color = "blue4") +
+  stat_2goods_budget(prices_new, income,
+                     label = NULL,
+                     color = "blue4") +
+  stat_2goods_budget(prices_new, sum(prices_new * quantities_substitution),
+                     label = NULL,
+                     linetype = "dashed",
+                     color = "blue4") +
+  geom_point_quantities(quantities,
+                        color = "blue4") +
+  geom_point_quantities(quantities_new,
+                        color = "blue4") +
+  geom_point_quantities(quantities_substitution,
+                        color = "blue4") +
+  geom_text_quantities(quantities,
+                       color = "blue4") +
+  geom_text_quantities(quantities_new,
+                       color = "blue4") +
+  geom_text_quantities(quantities_substitution,
+                       color = "blue4") +
+  scale_x_continuous("Quantity of good X") +
+  scale_y_continuous("Quantity of good Y") +
+  tune::coord_obs_pred(xlim = limits,
+                       ylim = limits)
+```
+
+## Examples for composite goods
+
+TODO

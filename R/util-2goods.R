@@ -1,5 +1,7 @@
 #' Budget line function factory for two goods
 #'
+#' `r lifecycle::badge('experimental')`
+#'
 #' @param prices A numeric vector of length 2 with the prices of the goods.
 #' @param income A scalar numeric of income.
 #'
@@ -17,6 +19,8 @@ util_2goods_budget <- function(prices, income) {
 }
 
 #' Indifference curve function factory for two goods
+#'
+#' `r lifecycle::badge('experimental')`
 #'
 #' @param f A `util` object.
 #' @param quantities A numeric vector of length 2 with the quantities of the
@@ -57,6 +61,8 @@ util_2goods_indifference <- function(f, quantities,
 }
 
 #' Utility function factory for two goods
+#'
+#' `r lifecycle::badge('experimental')`
 #'
 #' @param f A `util` object.
 #' @param quantity_y A scalar numeric of quantity of good Y.

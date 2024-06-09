@@ -4,6 +4,9 @@
 # econgoods
 
 <!-- badges: start -->
+
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 econgoods provides utility functions and composite goods in economics.
@@ -18,7 +21,7 @@ You can install the development version of econgoods from
 devtools::install_github("UchidaMizuki/econgoods")
 ```
 
-## Examples
+## Examples for utility functions
 
 ``` r
 library(econgoods)
@@ -37,12 +40,12 @@ library(tidyverse)
 
 ``` r
 # Sample data
-prices <- c(2, 1)
-income <- 6
+prices <- c(4, 2)
+income <- 12
 
-x <- 2
-y <- util_2goods_budget(prices, income)(x)
-quantities <- c(x, y)
+quantity_x <- 2
+quantity_y <- util_2goods_budget(prices, income)(quantity_x)
+quantities <- c(quantity_x, quantity_y)
 ```
 
 ``` r
@@ -55,7 +58,7 @@ cobb_douglas
 #>     efficiency * prod(quantities^weights, na.rm = TRUE)
 #> }
 #> (
-#>   efficiency = 3
+#>   efficiency = 6
 #>   weights    = [1] 0.6666667 0.3333333
 #>   ...
 #> )
@@ -71,7 +74,7 @@ leontief
 #>     efficiency * min(quantities/weights, na.rm = TRUE)
 #> }
 #> (
-#>   efficiency = 1.5
+#>   efficiency = 3
 #>   weights    = [1] 0.5 0.5
 #>   ...
 #> )
@@ -90,7 +93,7 @@ ces_minus_1_5
 #> (
 #>   substitution = -1.5
 #>   homogeneity  = 1
-#>   efficiency   = 3
+#>   efficiency   = 6
 #>   weights      = [1] 0.6666667 0.3333333
 #>   ...
 #> )
@@ -112,8 +115,65 @@ util_2goods_budget(prices, income)(1:6)
 #> [1]  4  2  0 -2 -4 -6
 ```
 
-#### Advanced plotting examples
+#### Sample plots
 
 <img src="man/figures/README-plot-indifference-curve-and-budget-line-1.png" width="100%" />
 
 <img src="man/figures/README-plot-utility-level-1.png" width="100%" />
+
+### Marginal utility for two goods
+
+- `util_2goods_utility()` returns the function of total utility or
+  marginal utility
+  - `gradient = FALSE`: Total utility (default)
+  - `gradient = TRUE`: Marginal utility
+
+``` r
+# Total utility
+util_2goods_utility(cobb_douglas, quantities[[2]])(1:6)
+#> [1]  7.559526 12.000000 15.724448 19.048813 22.104189 24.961006
+```
+
+``` r
+# Marginal utility
+util_2goods_utility(cobb_douglas, quantities[[2]], gradient = TRUE)(1:6)
+#> [1] 5.039684 4.000000 3.494322 3.174802 2.947225 2.773445
+```
+
+#### Sample plots
+
+<img src="man/figures/README-plot-marginal-utility-1.png" width="100%" />
+
+### Price effect for two goods
+
+``` r
+prices_new <- c(2, 2)
+
+# Price effect
+quantities_new <- util_demand(cobb_douglas, prices_new,
+                              income = income)
+quantities_new
+#> [1] 4 2
+```
+
+``` r
+# Substitution effect
+quantities_substitution <- util_demand(cobb_douglas, prices_new,
+                                       utility = cobb_douglas(quantities))
+quantities_substitution
+#> [1] 2.519842 1.259921
+```
+
+``` r
+# Income effect
+quantities_new - quantities_substitution
+#> [1] 1.480158 0.740079
+```
+
+#### Sample plots
+
+<img src="man/figures/README-plot-price-effect-1.png" width="100%" />
+
+## Examples for composite goods
+
+TODO

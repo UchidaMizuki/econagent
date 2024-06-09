@@ -2,6 +2,7 @@
 "_PACKAGE"
 
 ## usethis namespace: start
+#' @importFrom lifecycle deprecated
 #' @importFrom pillar obj_sum
 #' @importFrom pillar type_sum
 ## usethis namespace: end
