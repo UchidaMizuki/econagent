@@ -176,4 +176,4 @@ quantities_new - quantities_substitution
 
 ## Examples for composite goods
 
-TODO
+- TODO

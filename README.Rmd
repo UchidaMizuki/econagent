@@ -202,7 +202,7 @@ util_2goods_utility(cobb_douglas, quantities[[2]], gradient = TRUE)(1:6)
 ```
 #### Sample plots
 
-```{r plot-marginal-utility, echo=FALSE, fig.width=7, fig.height=3, warning=FALSE}
+```{r plot-marginal-utility, echo=FALSE, fig.width=7, fig.height=4, warning=FALSE}
 library(patchwork)
 
 stat_utility <- function(f, 
@@ -332,4 +332,4 @@ ggplot() +
 
 ## Examples for composite goods
 
-TODO
+- TODO
