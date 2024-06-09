@@ -124,9 +124,9 @@ util_2goods_budget(prices, income)(1:6)
 ### Marginal utility for two goods
 
 - `util_2goods_utility()` returns the function of total utility or
-  marginal utility
+  marginal utility with a given quantity of good Y.
   - `gradient = FALSE`: Total utility (default)
-  - `gradient = TRUE`: Marginal utility
+  - `gradient = TRUE`: Marginal utility for good X
 
 ``` r
 # Total utility

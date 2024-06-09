@@ -190,9 +190,9 @@ get_data_2goods_utility(c(leontief, ces_minus_1_5, cobb_douglas, ces_0_75)) |>
 
 ### Marginal utility for two goods
 
-- `util_2goods_utility()` returns the function of total utility or marginal utility
+- `util_2goods_utility()` returns the function of total utility or marginal utility with a given quantity of good Y.
   - `gradient = FALSE`: Total utility (default)
-  - `gradient = TRUE`: Marginal utility
+  - `gradient = TRUE`: Marginal utility for good X
 
 ```{r marginal-utility}
 # Total utility

@@ -60,7 +60,7 @@ util_2goods_indifference <- function(f, quantities,
   }
 }
 
-#' Utility function factory for two goods
+#' Utility function factory for two goods with a given quantity of good Y
 #'
 #' `r lifecycle::badge('experimental')`
 #'
