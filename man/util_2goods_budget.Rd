@@ -16,5 +16,5 @@ A function that takes a scalar numeric of quantity of good X and
 returns a scalar numeric of quantity of good Y.
 }
 \description{
-Budget line function factory for two goods
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }

@@ -19,5 +19,5 @@ returns a scalar numeric of total utility (\code{gradient = TRUE}) or marginal
 utility (\code{gradient = FALSE}).
 }
 \description{
-Utility function factory for two goods
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
