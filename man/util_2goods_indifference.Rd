@@ -7,6 +7,7 @@
 util_2goods_indifference(
   f,
   quantities,
+  otherwise = NA_real_,
   interval = c(1e-06, 1e+06),
   tol = 1e-06,
   ...
@@ -17,6 +18,9 @@ util_2goods_indifference(
 
 \item{quantities}{A numeric vector of length 2 with the quantities of the
 goods.}
+
+\item{otherwise}{Default value when the root is not found. By default,
+\code{NA_real}.}
 
 \item{interval}{Passed to \code{\link[stats:uniroot]{stats::uniroot()}}.}
 

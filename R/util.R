@@ -1,7 +1,6 @@
 #' Create a new utility function
 #'
-#' @param f A function that returns the utility and its gradient.
-#' It has a `gradient` argument that allows logical input.
+#' @param f A function that returns the utility.
 #' @param ... Parameters to be passed to `f`.
 #' @param class Name of subclass.
 #'
@@ -88,7 +87,7 @@ util_demand_hicksian.util <- function(f, prices, utility,
                                       ...) {
   income <- stats::uniroot(\(income, ...) util_indirect(f, prices, income, ...) - utility,
                            interval = interval,
-                           extendInt = "upX",
+                           extendInt = "yes",
                            tol = tol,
                            ...)$root
 

@@ -1,7 +1,6 @@
 #' Create a new homothetic utility function
 #'
-#' @param f A function that returns the utility and its gradient.
-#' It has a `gradient` argument that allows logical input.
+#' @param f A function that returns the utility.
 #' @param ... Parameters to be passed to `f`.
 #' @param class Name of subclass.
 #'

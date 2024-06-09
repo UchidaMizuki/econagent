@@ -21,6 +21,8 @@ util_2goods_budget <- function(prices, income) {
 #' @param f A `util` object.
 #' @param quantities A numeric vector of length 2 with the quantities of the
 #' goods.
+#' @param otherwise Default value when the root is not found. By default,
+#' `NA_real`.
 #' @param interval Passed to [stats::uniroot()].
 #' @param tol Passed to [stats::uniroot()].
 #' @param ... Passed to [stats::uniroot()].
@@ -30,9 +32,12 @@ util_2goods_budget <- function(prices, income) {
 #'
 #' @export
 util_2goods_indifference <- function(f, quantities,
+                                     otherwise = NA_real_,
                                      interval = c(1e-6, 1e6),
                                      tol = 1e-6,
                                      ...) {
+  vctrs::vec_check_size(quantities, 2)
+
   utility <- f(quantities)
   function(quantity_x) {
     purrr::map_dbl(
@@ -41,12 +46,44 @@ util_2goods_indifference <- function(f, quantities,
         \(quantity_x) {
           stats::uniroot(\(quantity_y, ...) f(c(quantity_x, quantity_y)) - utility,
                          interval = interval,
-                         extendInt = "upX",
+                         extendInt = "yes",
                          tol = tol,
                          ...)$root
         },
-        otherwise = NA_real_
+        otherwise = otherwise
       )
     )
+  }
+}
+
+#' Utility function factory for two goods
+#'
+#' @param f A `util` object.
+#' @param quantity_y A scalar numeric of quantity of good Y.
+#' @param gradient Logical input to return the gradient. By default, `FALSE`.
+#'
+#' @return A function that takes a scalar numeric of quantity of good X and
+#' returns a scalar numeric of total utility (`gradient = TRUE`) or marginal
+#' utility (`gradient = FALSE`).
+#'
+#' @export
+util_2goods_utility <- function(f, quantity_y,
+                                gradient = FALSE) {
+  vctrs::vec_check_size(quantity_y, 1)
+
+  if (gradient) {
+    function(quantity_x) {
+      quantity_x |>
+        purrr::map_dbl(
+          \(quantity_x) util_gradient(f, c(quantity_x, quantity_y))[[1]]
+        )
+    }
+  } else {
+    function(quantity_x) {
+      quantity_x |>
+        purrr::map_dbl(
+          \(quantity_x) f(c(quantity_x, quantity_y))
+        )
+    }
   }
 }

@@ -7,8 +7,7 @@
 new_util(f, ..., class = character())
 }
 \arguments{
-\item{f}{A function that returns the utility and its gradient.
-It has a \code{gradient} argument that allows logical input.}
+\item{f}{A function that returns the utility.}
 
 \item{...}{Parameters to be passed to \code{f}.}
 

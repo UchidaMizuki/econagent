@@ -23,6 +23,24 @@ util_leontief <- function(efficiency = NA_real_,
 }
 
 #' @export
+util_gradient.util_leontief <- function(f, quantities, ...) {
+  rlang::check_dots_empty()
+
+  loc_min <- quantities / f$weights
+  loc_min <- loc_min == min(loc_min, na.rm = TRUE)
+  loc_min[is.na(loc_min)] <- FALSE
+
+  size <- length(quantities)
+  if (sum(loc_min, na.rm = TRUE) == 1) {
+    gradient_utility <- rep(0, size)
+    gradient_utility[loc_min] <- f$efficiency / f$weights[loc_min]
+  } else {
+    gradient_utility <- rep(NA_real_, size)
+  }
+  gradient_utility
+}
+
+#' @export
 util_calibrate.util_leontief <- function(f, prices, quantities, ...) {
   rlang::check_dots_empty()
 
