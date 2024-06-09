@@ -18,17 +18,8 @@ util_ces <- function(substitution,
   check_efficiency_nonnegative(efficiency)
   check_weights_nonnegative(weights)
 
-  f <- function(quantities, substitution, homogeneity, efficiency, weights,
-                gradient = FALSE) {
-    if (gradient) {
-      gradient_utility <- efficiency *
-        homogeneity * sum(weights * quantities ^ substitution, na.rm = TRUE) ^ (homogeneity / substitution - 1) *
-        weights * quantities ^ (substitution - 1)
-      gradient_utility[quantities == 0] <- 0
-      gradient_utility
-    } else {
-      efficiency * sum(weights * quantities ^ substitution, na.rm = TRUE) ^ (homogeneity / substitution)
-    }
+  f <- function(quantities, substitution, homogeneity, efficiency, weights) {
+    efficiency * sum(weights * quantities ^ substitution, na.rm = TRUE) ^ (homogeneity / substitution)
   }
 
   if (homothetic) {
@@ -50,6 +41,17 @@ util_ces <- function(substitution,
              weights = weights,
              class = "util_ces")
   }
+}
+
+#' @export
+util_gradient.util_ces <- function(f, quantities, ...) {
+  rlang::check_dots_empty()
+
+  gradient_utility <- f$efficiency *
+    f$homogeneity * sum(f$weights * quantities ^ f$substitution, na.rm = TRUE) ^ (f$homogeneity / f$substitution - 1) *
+    f$weights * quantities ^ (f$substitution - 1)
+  gradient_utility[quantities == 0] <- 0
+  gradient_utility
 }
 
 #' @export

@@ -12,19 +12,21 @@ util_linear <- function(efficiency = NA_real_,
   check_efficiency_nonnegative(efficiency)
   check_weights_nonnegative(weights)
 
-  f <- function(quantities, efficiency, weights,
-                gradient = FALSE) {
-    if (gradient) {
-      efficiency * weights
-    } else {
-      efficiency * sum(weights * quantities)
-    }
+  f <- function(quantities, efficiency, weights) {
+    efficiency * sum(weights * quantities)
   }
 
   new_util_homothetic(f,
                       efficiency = efficiency,
                       weights = weights,
                       class = "util_linear")
+}
+
+#' @export
+util_gradient.util_linear <- function(f, quantities, ...) {
+  rlang::check_dots_empty()
+
+  f$efficiency * f$weights
 }
 
 #' @export

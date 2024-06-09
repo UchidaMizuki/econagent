@@ -29,7 +29,7 @@ util_demand_hicksian.util_homothetic <- function(f, prices, utility,
                                                    ...)
 
     sweep(gradient_quantities, 1, utility / f(quantities), "*") +
-      outer(quantities, as.double(-utility / f(quantities) ^ 2 * f(quantities, gradient = TRUE) %*% gradient_quantities))
+      outer(quantities, as.double(-utility / f(quantities) ^ 2 * util_gradient(f, quantities) %*% gradient_quantities))
   } else {
     quantities * utility / f(quantities)
   }

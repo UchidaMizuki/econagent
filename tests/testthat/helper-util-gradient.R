@@ -1,6 +1,5 @@
 test_util_gradient <- function(f, quantities) {
-  analytic <- f(quantities,
-                gradient = TRUE)
+  analytic <- util_gradient(f, quantities)
   numerical <- util_gradient_numerical(f, quantities)
   expect_equal(analytic, numerical,
                tolerance = 1e-6)

@@ -14,15 +14,8 @@ util_cobb_douglas <- function(efficiency = NA_real_,
   check_efficiency_nonnegative(efficiency)
   check_weights_nonnegative(weights)
 
-  f <- function(quantities, efficiency, weights,
-                gradient = FALSE) {
-    if (gradient) {
-      gradient_utility <- efficiency * prod(quantities ^ weights, na.rm = TRUE) * weights / quantities
-      gradient_utility[quantities == 0] <- 0
-      gradient_utility
-    } else {
-      efficiency * prod(quantities ^ weights, na.rm = TRUE)
-    }
+  f <- function(quantities, efficiency, weights) {
+    efficiency * prod(quantities ^ weights, na.rm = TRUE)
   }
 
   if (homothetic) {
@@ -40,6 +33,15 @@ util_cobb_douglas <- function(efficiency = NA_real_,
              weights = weights,
              class = "util_cobb_douglas")
   }
+}
+
+#' @export
+util_gradient.util_cobb_douglas <- function(f, quantities, ...) {
+  rlang::check_dots_empty()
+
+  gradient_utility <- f$efficiency * prod(quantities ^ f$weights, na.rm = TRUE) * f$weights / quantities
+  gradient_utility[quantities == 0] <- 0
+  gradient_utility
 }
 
 #' @export

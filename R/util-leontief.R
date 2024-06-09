@@ -12,13 +12,8 @@ util_leontief <- function(efficiency = NA_real_,
   check_efficiency_nonnegative(efficiency)
   check_weights_nonnegative(weights)
 
-  f <- function(quantities, efficiency, weights,
-                gradient = FALSE) {
-    if (gradient) {
-      cli::cli_abort("{.code gradient == TRUE} is not supported for Leontief utility function.")
-    } else {
-      efficiency * min(quantities / weights, na.rm = TRUE)
-    }
+  f <- function(quantities, efficiency, weights) {
+    efficiency * min(quantities / weights, na.rm = TRUE)
   }
 
   new_util_homothetic(f,

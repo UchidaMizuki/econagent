@@ -15,6 +15,19 @@ new_util <- function(f, ...,
                                class = c(class, "util"))
 }
 
+#' Gradient of a utility function
+#'
+#' @param f A `util` object.
+#' @param quantities A numeric vector of quantities.
+#' @param ... Additional arguments.
+#'
+#' @return A numeric vector of gradients.
+#'
+#' @export
+util_gradient <- function(f, quantities, ...) {
+  UseMethod("util_gradient")
+}
+
 #' Calibrate a utility function
 #'
 #' @param f A `util` object.
@@ -44,6 +57,7 @@ util_calibrate <- function(f, prices, quantities, ...) {
 util_demand_marshallian <- function(f, prices, income,
                                     gradient = FALSE,
                                     ...) {
+  vctrs::vec_check_size(income, 1)
   UseMethod("util_demand_marshallian")
 }
 
@@ -62,6 +76,7 @@ util_demand_marshallian <- function(f, prices, income,
 util_demand_hicksian <- function(f, prices, utility,
                                  gradient = FALSE,
                                  ...) {
+  vctrs::vec_check_size(utility, 1)
   UseMethod("util_demand_hicksian")
 }
 
@@ -73,7 +88,7 @@ util_demand_hicksian.util <- function(f, prices, utility,
                                       ...) {
   income <- stats::uniroot(\(income, ...) util_indirect(f, prices, income, ...) - utility,
                            interval = interval,
-                           extendInt = "yes",
+                           extendInt = "upX",
                            tol = tol,
                            ...)$root
 
@@ -169,7 +184,7 @@ util_indirect <- function(f, prices, income,
                           gradient = FALSE,
                           ...) {
   if (gradient) {
-    as.double(f(util_demand_marshallian(f, prices, income), gradient = TRUE, ...) %*%
+    as.double(util_gradient(f, util_demand_marshallian(f, prices, income, ...)) %*%
                 util_demand_marshallian(f, prices, income, gradient = TRUE, ...))
   } else {
     f(util_demand_marshallian(f, prices, income, ...))
