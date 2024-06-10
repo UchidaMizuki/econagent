@@ -200,6 +200,7 @@ util_2goods_utility(cobb_douglas, quantities[[2]])(1:6)
 # Marginal utility
 util_2goods_utility(cobb_douglas, quantities[[2]], gradient = TRUE)(1:6)
 ```
+
 #### Sample plots
 
 ```{r plot-marginal-utility, echo=FALSE, fig.width=7, fig.height=4, warning=FALSE}
@@ -257,6 +258,22 @@ plot_marginal_utility <- ggplot() +
   scale_y_continuous("Marginal utility of good X")
 
 plot_total_utility + plot_marginal_utility
+```
+
+```{r plot-utility-level-hline, warning=FALSE, fig.width=7, fig.height=6, echo=FALSE}
+get_data_2goods_utility(c(leontief, ces_minus_1_5, cobb_douglas, ces_0_75)) |> 
+  ggplot(aes(quantity_x, quantity_y)) +
+  geom_contour_filled(aes(z = utility),
+                      binwidth = 4) +
+  geom_hline(yintercept = quantities[[2]],
+             color = "white",
+             linetype = "dashed") +
+  scale_x_continuous("Quantity of good X") +
+  scale_y_continuous("Quantity of good Y") +
+  scale_fill_viridis_d("Utility") +
+  facet_wrap(~ utility_type,
+             ncol = 2) +
+  tune::coord_obs_pred()
 ```
 
 ### Price effect for two goods

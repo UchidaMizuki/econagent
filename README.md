@@ -144,6 +144,8 @@ util_2goods_utility(cobb_douglas, quantities[[2]], gradient = TRUE)(1:6)
 
 <img src="man/figures/README-plot-marginal-utility-1.png" width="100%" />
 
+<img src="man/figures/README-plot-utility-level-hline-1.png" width="100%" />
+
 ### Price effect for two goods
 
 ``` r
