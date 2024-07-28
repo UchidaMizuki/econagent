@@ -7,7 +7,7 @@
 util_calibrate(f, prices, quantities, ...)
 }
 \arguments{
-\item{f}{A \code{util} object.}
+\item{f}{A \code{econ_util} object.}
 
 \item{prices}{A numeric vector of prices.}
 
@@ -16,7 +16,7 @@ util_calibrate(f, prices, quantities, ...)
 \item{...}{Additional arguments.}
 }
 \value{
-A \code{util} object with calibrated parameters.
+A \code{econ_util} object with calibrated parameters.
 }
 \description{
 Calibrate a utility function

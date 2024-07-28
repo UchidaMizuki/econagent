@@ -4,19 +4,19 @@
 #' @param ... Parameters to be passed to `f`.
 #' @param class Name of subclass.
 #'
-#' @return A `util` object.
+#' @return A `econ_util` object.
 #'
 #' @export
 new_util <- function(f, ...,
                      class = character()) {
   dots <- rlang::list2(...)
   partialised::new_partialised(f, dots,
-                               class = c(class, "util"))
+                               class = c(class, "econ_util"))
 }
 
 #' Gradient of a utility function
 #'
-#' @param f A `util` object.
+#' @param f A `econ_util` object.
 #' @param quantities A numeric vector of quantities.
 #' @param ... Additional arguments.
 #'
@@ -29,12 +29,12 @@ util_gradient <- function(f, quantities, ...) {
 
 #' Calibrate a utility function
 #'
-#' @param f A `util` object.
+#' @param f A `econ_util` object.
 #' @param prices A numeric vector of prices.
 #' @param quantities A numeric vector of quantities.
 #' @param ... Additional arguments.
 #'
-#' @return A `util` object with calibrated parameters.
+#' @return A `econ_util` object with calibrated parameters.
 #'
 #' @export
 util_calibrate <- function(f, prices, quantities, ...) {
@@ -43,7 +43,7 @@ util_calibrate <- function(f, prices, quantities, ...) {
 
 #' Marshallian demand function
 #'
-#' @param f A `util` object.
+#' @param f A `econ_util` object.
 #' @param prices A numeric vector of prices.
 #' @param income A scalar numeric of income.
 #' @param gradient Logical input to return the gradient. By default, `FALSE`.
@@ -62,7 +62,7 @@ util_demand_marshallian <- function(f, prices, income,
 
 #' Hicksian demand function
 #'
-#' @param f A `util` object.
+#' @param f A `econ_util` object.
 #' @param prices A numeric vector of prices.
 #' @param utility A scalar numeric of utility level.
 #' @param gradient Logical input to return the gradient. By default, `FALSE`.
@@ -80,11 +80,11 @@ util_demand_hicksian <- function(f, prices, utility,
 }
 
 #' @export
-util_demand_hicksian.util <- function(f, prices, utility,
-                                      gradient = FALSE,
-                                      interval = c(1e-6, 1e6),
-                                      tol = 1e-6,
-                                      ...) {
+util_demand_hicksian.econ_util <- function(f, prices, utility,
+                                           gradient = FALSE,
+                                           interval = c(1e-6, 1e6),
+                                           tol = 1e-6,
+                                           ...) {
   income <- stats::uniroot(\(income, ...) util_indirect(f, prices, income, ...) - utility,
                            interval = interval,
                            extendInt = "yes",
@@ -109,7 +109,7 @@ util_demand_hicksian.util <- function(f, prices, utility,
 #' This function works as Marshallian demand function when `income` is input, and
 #' as Hicksian demand function when `utility` is input.
 #'
-#' @param f A `util` object.
+#' @param f A `econ_util` object.
 #' @param prices A numeric vector of prices.
 #' @param income A scalar numeric of income. If `NULL`, `utility` must be
 #' provided.
@@ -144,7 +144,7 @@ util_demand <- function(f, prices,
 
 #' Expenditure function
 #'
-#' @param f A `util` object.
+#' @param f A `econ_util` object.
 #' @param prices A numeric vector of prices.
 #' @param utility A scalar numeric of utility level.
 #' @param gradient Logical input to return the gradient. By default, `FALSE`.
@@ -168,7 +168,7 @@ util_expenditure <- function(f, prices, utility,
 
 #' Indirect utility function
 #'
-#' @param f A `util` object.
+#' @param f A `econ_util` object.
 #' @param prices A numeric vector of prices.
 #' @param income A scalar numeric of income.
 #' @param gradient Logical input to return the gradient. By default, `FALSE`.

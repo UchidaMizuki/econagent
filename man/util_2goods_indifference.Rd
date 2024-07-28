@@ -6,7 +6,7 @@
 \usage{
 util_2goods_indifference(
   f,
-  quantities,
+  utility,
   otherwise = NA_real_,
   interval = c(1e-06, 1e+06),
   tol = 1e-06,
@@ -14,10 +14,9 @@ util_2goods_indifference(
 )
 }
 \arguments{
-\item{f}{A \code{util} object.}
+\item{f}{A \code{econ_util} object.}
 
-\item{quantities}{A numeric vector of length 2 with the quantities of the
-goods.}
+\item{utility}{A scalar numeric of utility.}
 
 \item{otherwise}{Default value when the root is not found. By default,
 \code{NA_real}.}

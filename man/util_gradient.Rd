@@ -7,7 +7,7 @@
 util_gradient(f, quantities, ...)
 }
 \arguments{
-\item{f}{A \code{util} object.}
+\item{f}{A \code{econ_util} object.}
 
 \item{quantities}{A numeric vector of quantities.}
 

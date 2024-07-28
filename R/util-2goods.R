@@ -13,8 +13,8 @@ util_2goods_budget <- function(prices, income) {
   vctrs::vec_check_size(prices, 2)
   vctrs::vec_check_size(income, 1)
 
-  function(quantity_x) {
-    (income - prices[[1]] * quantity_x) / prices[[2]]
+  function(quantity, axis = 1) {
+    (income - prices[axis] * quantity) / prices[-axis]
   }
 }
 
@@ -22,9 +22,8 @@ util_2goods_budget <- function(prices, income) {
 #'
 #' `r lifecycle::badge('experimental')`
 #'
-#' @param f A `util` object.
-#' @param quantities A numeric vector of length 2 with the quantities of the
-#' goods.
+#' @param f A `econ_util` object.
+#' @param utility A scalar numeric of utility.
 #' @param otherwise Default value when the root is not found. By default,
 #' `NA_real`.
 #' @param interval Passed to [stats::uniroot()].
@@ -35,24 +34,31 @@ util_2goods_budget <- function(prices, income) {
 #' returns a scalar numeric of quantity of good Y.
 #'
 #' @export
-util_2goods_indifference <- function(f, quantities,
+util_2goods_indifference <- function(f, utility,
                                      otherwise = NA_real_,
                                      interval = c(1e-6, 1e6),
                                      tol = 1e-6,
                                      ...) {
-  vctrs::vec_check_size(quantities, 2)
+  vctrs::vec_check_size(utility, 1)
 
-  utility <- f(quantities)
-  function(quantity_x) {
+  function(quantity, axis = 1) {
     purrr::map_dbl(
-      quantity_x,
+      quantity,
       purrr::possibly(
-        \(quantity_x) {
-          stats::uniroot(\(quantity_y, ...) f(c(quantity_x, quantity_y)) - utility,
-                         interval = interval,
-                         extendInt = "yes",
-                         tol = tol,
-                         ...)$root
+        \(quantity) {
+          stats::uniroot(
+            \(quantity_other, ...) {
+              quantities <- rep(NA_real_, 2)
+              quantities[axis] <- quantity
+              quantities[-axis] <- quantity_other
+
+              f(quantities) - utility
+            },
+            interval = interval,
+            extendInt = "yes",
+            tol = tol,
+            ...
+          )$root
         },
         otherwise = otherwise
       )
@@ -64,8 +70,8 @@ util_2goods_indifference <- function(f, quantities,
 #'
 #' `r lifecycle::badge('experimental')`
 #'
-#' @param f A `util` object.
-#' @param quantity_y A scalar numeric of quantity of good Y.
+#' @param f A `econ_util` object.
+#' @param quantity_intercept A scalar numeric of quantity.
 #' @param gradient Logical input to return the gradient. By default, `FALSE`.
 #'
 #' @return A function that takes a scalar numeric of quantity of good X and
@@ -73,22 +79,34 @@ util_2goods_indifference <- function(f, quantities,
 #' utility (`gradient = FALSE`).
 #'
 #' @export
-util_2goods_utility <- function(f, quantity_y,
+util_2goods_utility <- function(f, quantity_intercept,
                                 gradient = FALSE) {
-  vctrs::vec_check_size(quantity_y, 1)
+  vctrs::vec_check_size(quantity_intercept, 1)
 
   if (gradient) {
-    function(quantity_x) {
-      quantity_x |>
+    function(quantity, axis = 1) {
+      quantity |>
         purrr::map_dbl(
-          \(quantity_x) util_gradient(f, c(quantity_x, quantity_y))[[1]]
+          \(quantity) {
+            quantities <- rep(NA_real_, 2)
+            quantities[axis] <- quantity
+            quantities[-axis] <- quantity_intercept
+
+            util_gradient(f, quantities)[axis]
+          }
         )
     }
   } else {
-    function(quantity_x) {
-      quantity_x |>
+    function(quantity, axis = 1) {
+      quantity |>
         purrr::map_dbl(
-          \(quantity_x) f(c(quantity_x, quantity_y))
+          \(quantity) {
+            quantities <- rep(NA_real_, 2)
+            quantities[axis] <- quantity
+            quantities[-axis] <- quantity_intercept
+
+            f(quantities)
+          }
         )
     }
   }

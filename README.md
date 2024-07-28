@@ -106,7 +106,7 @@ ces_minus_1_5
 - `util_2goods_budget()` returns the function of budget line.
 
 ``` r
-util_2goods_indifference(cobb_douglas, quantities)(1:6)
+util_2goods_indifference(cobb_douglas, cobb_douglas(quantities))(1:6)
 #> [1] 8.0000000 2.0000000 0.8888889 0.5000000 0.3200000 0.2222222
 ```
 

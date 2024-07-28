@@ -2,14 +2,14 @@
 % Please edit documentation in R/util-2goods.R
 \name{util_2goods_utility}
 \alias{util_2goods_utility}
-\title{Utility function factory for two goods}
+\title{Utility function factory for two goods with a given quantity of good Y}
 \usage{
-util_2goods_utility(f, quantity_y, gradient = FALSE)
+util_2goods_utility(f, quantity_intercept, gradient = FALSE)
 }
 \arguments{
-\item{f}{A \code{util} object.}
+\item{f}{A \code{econ_util} object.}
 
-\item{quantity_y}{A scalar numeric of quantity of good Y.}
+\item{quantity_intercept}{A scalar numeric of quantity.}
 
 \item{gradient}{Logical input to return the gradient. By default, \code{FALSE}.}
 }

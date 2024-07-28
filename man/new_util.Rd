@@ -14,7 +14,7 @@ new_util(f, ..., class = character())
 \item{class}{Name of subclass.}
 }
 \value{
-A \code{util} object.
+A \code{econ_util} object.
 }
 \description{
 Create a new utility function

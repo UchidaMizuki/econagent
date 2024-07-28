@@ -7,7 +7,7 @@
 util_indirect(f, prices, income, gradient = FALSE, ...)
 }
 \arguments{
-\item{f}{A \code{util} object.}
+\item{f}{A \code{econ_util} object.}
 
 \item{prices}{A numeric vector of prices.}
 

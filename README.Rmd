@@ -76,7 +76,7 @@ ces_minus_1_5
 - `util_2goods_budget()` returns the function of budget line.
 
 ```{r indifference-curve-and-budget-line}
-util_2goods_indifference(cobb_douglas, quantities)(1:6)
+util_2goods_indifference(cobb_douglas, cobb_douglas(quantities))(1:6)
 util_2goods_budget(prices, income)(1:6)
 ```
 
@@ -90,12 +90,12 @@ library(geomtextpath)
 theme_set(theme_bw())
 
 limits <- c(0, max(income / prices))
-stat_indifference <- function(f, quantities,
+stat_indifference <- function(f, utility,
                               label = pillar::obj_sum(f) |> 
                                 # https://github.com/AllanCameron/geomtextpath/issues/75
                                 str_replace_all("-", "\u2212"),
                               ...) {
-  fun <- util_2goods_indifference(f, quantities, otherwise = 1e6)
+  fun <- util_2goods_indifference(f, utility, otherwise = 1e6)
   if (is.null(label)) {
     stat_function(fun = fun,
                   xlim = limits,
@@ -136,12 +136,12 @@ ggplot() +
              color = "dimgray") +
   geom_vline(xintercept = 0,
              color = "dimgray") +
-  stat_indifference(cobb_douglas, quantities,
+  stat_indifference(cobb_douglas, cobb_douglas(quantities),
                     color = "red4") +
-  stat_indifference(leontief, quantities,
+  stat_indifference(leontief, leontief(quantities),
                     n = 201,
                     color = "red4") +
-  stat_indifference(ces_minus_1_5, quantities,
+  stat_indifference(ces_minus_1_5, ces_minus_1_5(quantities),
                     color = "red4") +
   stat_2goods_budget(prices, income,
                      color = "blue4") +
@@ -315,9 +315,9 @@ ggplot() +
              color = "dimgray") +
   geom_vline(xintercept = 0,
              color = "dimgray") +
-  stat_indifference(cobb_douglas, quantities,
+  stat_indifference(cobb_douglas, cobb_douglas(quantities),
                     color = "red4") +
-  stat_indifference(cobb_douglas, quantities_new,
+  stat_indifference(cobb_douglas, cobb_douglas(quantities_new),
                     label = NULL,
                     color = "red4") +
   stat_2goods_budget(prices, income,

@@ -7,7 +7,7 @@
 util_demand_hicksian(f, prices, utility, gradient = FALSE, ...)
 }
 \arguments{
-\item{f}{A \code{util} object.}
+\item{f}{A \code{econ_util} object.}
 
 \item{prices}{A numeric vector of prices.}
 
