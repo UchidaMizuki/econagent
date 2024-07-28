@@ -71,7 +71,7 @@ util_2goods_indifference <- function(f, utility,
 #' `r lifecycle::badge('experimental')`
 #'
 #' @param f A `econ_util` object.
-#' @param quantity_intercept A scalar numeric of quantity.
+#' @param quantity A scalar numeric of quantity.
 #' @param gradient Logical input to return the gradient. By default, `FALSE`.
 #'
 #' @return A function that takes a scalar numeric of quantity of good X and
@@ -79,9 +79,10 @@ util_2goods_indifference <- function(f, utility,
 #' utility (`gradient = FALSE`).
 #'
 #' @export
-util_2goods_utility <- function(f, quantity_intercept,
+util_2goods_utility <- function(f, quantity,
                                 gradient = FALSE) {
-  vctrs::vec_check_size(quantity_intercept, 1)
+  vctrs::vec_check_size(quantity, 1)
+  quantity_fixed <- quantity
 
   if (gradient) {
     function(quantity, axis = 1) {
@@ -90,7 +91,7 @@ util_2goods_utility <- function(f, quantity_intercept,
           \(quantity) {
             quantities <- rep(NA_real_, 2)
             quantities[axis] <- quantity
-            quantities[-axis] <- quantity_intercept
+            quantities[-axis] <- quantity_fixed
 
             util_gradient(f, quantities)[axis]
           }
@@ -103,7 +104,7 @@ util_2goods_utility <- function(f, quantity_intercept,
           \(quantity) {
             quantities <- rep(NA_real_, 2)
             quantities[axis] <- quantity
-            quantities[-axis] <- quantity_intercept
+            quantities[-axis] <- quantity_fixed
 
             f(quantities)
           }

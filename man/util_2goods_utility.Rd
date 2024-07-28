@@ -4,12 +4,12 @@
 \alias{util_2goods_utility}
 \title{Utility function factory for two goods with a given quantity of good Y}
 \usage{
-util_2goods_utility(f, quantity_intercept, gradient = FALSE)
+util_2goods_utility(f, quantity, gradient = FALSE)
 }
 \arguments{
 \item{f}{A \code{econ_util} object.}
 
-\item{quantity_intercept}{A scalar numeric of quantity.}
+\item{quantity}{A scalar numeric of quantity.}
 
 \item{gradient}{Logical input to return the gradient. By default, \code{FALSE}.}
 }
