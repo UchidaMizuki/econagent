@@ -16,9 +16,11 @@ Suggests:
 Config/testthat/edition: 3
 Imports: 
     cli,
+    dplyr,
     lifecycle,
     partialised,
     pillar,
     purrr,
     rlang,
+    timbr (>= 0.2.2.9000),
     vctrs
