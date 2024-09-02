@@ -34,6 +34,10 @@ goods_reprice <- function(data, prices,
         x$prices[[1]] <- purrr::map2(
           prices_new, y$prices,
           \(prices_new, prices) {
+            if (vctrs::vec_is_empty(prices)) {
+              return(NULL)
+            }
+
             prices |>
               dplyr::mutate(price = .data$price * .env$prices_new)
           }
@@ -42,4 +46,55 @@ goods_reprice <- function(data, prices,
       }
       x
     })
+}
+
+#' Reprice goods recursively
+#'
+#' @param data A `econ_goods` object.
+#' @param f A function that returns a data frame with columns `price`.
+#' @param gradient A function that returns a data frame with columns `prices`.
+#' @param ... Additional arguments passed to `stats::optim()`.
+#'
+#' @return A `econ_goods` object.
+#'
+#' @export
+goods_reprice_recursive <- function(data, f,
+                                    gradient = NULL, ...) {
+  prices <- f(data)
+
+  par <- prices$price
+  fn <- function(par) {
+    prices$price <- par
+    data <- goods_reprice(data, prices)
+    prices_new <- f(data)
+
+    sum((prices_new$price - par) ^ 2)
+  }
+  if (is.null(gradient)) {
+    gr <- NULL
+  } else {
+    gr <- function(par) {
+      prices$price <- par
+      data <- goods_reprice(data, prices,
+                            gradient = TRUE)
+      prices_new <- f(data) |>
+        dplyr::left_join(gradient(data),
+                         by = setdiff(names(prices), "price"))
+
+      purrr::map2_dbl(
+        prices_new$price - par, prices_new$prices,
+        \(change_price, prices) {
+          2 * sum(change_price * (vctrs::vec_size(prices) * prices$price - 1))
+        }
+      )
+    }
+  }
+  par <- stats::optim(par = par,
+                      fn = fn,
+                      gr = gr,
+                      method = "BFGS", ...) |>
+    purrr::chuck("par")
+
+  prices$price <- par
+  goods_reprice(data, prices)
 }
