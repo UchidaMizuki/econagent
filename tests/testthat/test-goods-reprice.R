@@ -16,7 +16,7 @@ test_that("goods_reprice() works", {
                tolerance = 1e-6)
 })
 
-test_that("goods_reprice_recursive() works", {
+test_that("goods_reprice_recursively() works", {
   set.seed(1234)
 
   industry <- get_industry_iotable_regional()
@@ -49,8 +49,8 @@ test_that("goods_reprice_recursive() works", {
 
   industry_new <- industry |>
     goods_reprice(prices) |>
-    goods_reprice_recursive(f,
-                            gradient = gradient)
+    goods_reprice_recursively(f,
+                              gradient = gradient)
 
   expect_equal(industry_new, industry,
                tolerance = 1e-6)

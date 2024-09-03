@@ -58,8 +58,8 @@ goods_reprice <- function(data, prices,
 #' @return A `econ_goods` object.
 #'
 #' @export
-goods_reprice_recursive <- function(data, f,
-                                    gradient = NULL, ...) {
+goods_reprice_recursively <- function(data, f,
+                                      gradient = NULL, ...) {
   prices <- f(data)
 
   par <- prices$price
