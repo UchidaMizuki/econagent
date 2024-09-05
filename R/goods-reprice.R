@@ -1,25 +1,38 @@
 #' Reprice goods
 #'
 #' @param data A `econ_goods` object.
-#' @param prices A data frame that contains columns `price`.
+#' @param prices A data frame or a list of data frames that contains columns
+#' `price`.
 #' @param gradient Logical input to return the gradient. By default, `FALSE`.
 #'
 #' @return A `econ_goods` object.
-goods_reprice <- function(data, prices,
+goods_reprice <- function(data,
+                          prices = NULL,
                           gradient = FALSE) {
   if (gradient) {
-    prices <- prices |>
-      tibble::add_column(prices = prices |>
-                           dplyr::mutate(price = 1) |>
-                           vctrs::vec_chop())
     data <- data |>
       dplyr::mutate(prices = vctrs::vec_init(list()))
   }
 
+  if (is.data.frame(prices)) {
+    prices <- list(prices)
+  }
+
+  for (i in seq_along(prices)) {
+    if (gradient) {
+      prices[[i]] <- prices[[i]] |>
+        tibble::add_column(prices = prices[[i]] |>
+                             dplyr::mutate(price = 1) |>
+                             vctrs::vec_chop())
+    }
+
+    data <- data |>
+      dplyr::rows_update(prices[[i]],
+                         by = setdiff(names(prices[[i]]), c("price", "prices")))
+  }
+
   data |>
-    dplyr::rows_update(prices,
-                       by = setdiff(names(prices), c("price", "prices"))) |>
-    timbr::traverse(function(x, y) {
+    timbr::traverse(\(x, y) {
       quantities <- util_demand(x$utility[[1]], y$price,
                                 utility = x$quantity)
       x$price <- sum(y$price * quantities) / x$quantity
@@ -35,11 +48,11 @@ goods_reprice <- function(data, prices,
           prices_new, y$prices,
           \(prices_new, prices) {
             if (vctrs::vec_is_empty(prices)) {
-              return(NULL)
+              NULL
+            } else {
+              prices |>
+                dplyr::mutate(price = .data$price * .env$prices_new)
             }
-
-            prices |>
-              dplyr::mutate(price = .data$price * .env$prices_new)
           }
         ) |>
           dplyr::bind_rows()
