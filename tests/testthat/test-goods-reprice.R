@@ -39,7 +39,7 @@ test_that("goods_reprice_recursively() works", {
   gradient <- function(industry) {
     prices_new <- industry |>
       tibble::as_tibble() |>
-      dplyr::select("output_sector", "prices")
+      dplyr::select("output_sector", "gradient")
 
     prices |>
       dplyr::select(!"price") |>

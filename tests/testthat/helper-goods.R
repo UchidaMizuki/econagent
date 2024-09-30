@@ -1,6 +1,6 @@
 get_sector <- function() {
   list(industry = factor(letters[1:3]),
-       valueadded = factor(letters[4:5]))
+       value_added = factor(letters[4:5]))
 }
 
 get_industry_iotable_regional <- function() {
@@ -13,16 +13,16 @@ get_industry_iotable_regional <- function() {
                   quantity = runif(dplyr::n())) |>
     goods_by(output_sector, input_sector)
 
-  valueadded <- vctrs::vec_expand_grid(output_sector = sector$industry,
-                                       input_sector = sector$valueadded) |>
+  value_added <- vctrs::vec_expand_grid(output_sector = sector$industry,
+                                       input_sector = sector$value_added) |>
     dplyr::mutate(price = 1,
                   quantity = runif(dplyr::n())) |>
     goods_by(output_sector, input_sector) |>
     goods_compose(util_cobb_douglas(),
-                  node = factor("valueadded"))
+                  node = factor("value_added"))
 
-  rbind(interindustry, valueadded) |>
-    goods_compose(util_leontief())
+  rbind(interindustry, value_added) |>
+    goods_compose(util_ces(-5))
 }
 
 get_prices_industry_iotable_regional <- function(industry_iotable_regional) {
@@ -31,4 +31,10 @@ get_prices_industry_iotable_regional <- function(industry_iotable_regional) {
     tibble::as_tibble() |>
     dplyr::ungroup() |>
     dplyr::select(output_sector, input_sector, price)
+}
+
+get_quantities_industry_iotable_regional <- function(industry_iotable_regional) {
+  industry_iotable_regional |>
+    tibble::as_tibble() |>
+    dplyr::select(output_sector, quantity)
 }

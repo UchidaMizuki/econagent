@@ -11,7 +11,7 @@ goods_reprice <- function(data,
                           gradient = FALSE) {
   if (gradient) {
     data <- data |>
-      dplyr::mutate(prices = vctrs::vec_init(list()))
+      dplyr::mutate(gradient = vctrs::vec_init(list()))
   }
 
   if (is.data.frame(prices)) {
@@ -21,14 +21,14 @@ goods_reprice <- function(data,
   for (i in seq_along(prices)) {
     if (gradient) {
       prices[[i]] <- prices[[i]] |>
-        tibble::add_column(prices = prices[[i]] |>
+        tibble::add_column(gradient = prices[[i]] |>
                              dplyr::mutate(price = 1) |>
                              vctrs::vec_chop())
     }
 
     data <- data |>
       dplyr::rows_update(prices[[i]],
-                         by = setdiff(names(prices[[i]]), c("price", "prices")))
+                         by = setdiff(names(prices[[i]]), c("price", "gradient")))
   }
 
   data |>
@@ -41,17 +41,17 @@ goods_reprice <- function(data,
         gradient_quantities <- util_demand(x$utility[[1]], y$price,
                                            utility = x$quantity,
                                            gradient = TRUE)
-        prices_new <- as.double(gradient_quantities %*% y$price) / x$quantity +
+        gradient_new <- as.double(gradient_quantities %*% y$price) / x$quantity +
           quantities / x$quantity
 
-        x$prices[[1]] <- purrr::map2(
-          prices_new, y$prices,
-          \(prices_new, prices) {
-            if (vctrs::vec_is_empty(prices)) {
+        x$gradient[[1]] <- purrr::map2(
+          gradient_new, y$gradient,
+          \(gradient_new, gradient) {
+            if (vctrs::vec_is_empty(gradient)) {
               NULL
             } else {
-              prices |>
-                dplyr::mutate(price = .data$price * .env$prices_new)
+              gradient |>
+                dplyr::mutate(price = .data$price * .env$gradient_new)
             }
           }
         ) |>
@@ -95,9 +95,9 @@ goods_reprice_recursively <- function(data, f,
                          by = setdiff(names(prices), "price"))
 
       purrr::map2_dbl(
-        prices_new$price - par, prices_new$prices,
-        \(change_price, prices) {
-          2 * sum(change_price * (vctrs::vec_size(prices) * prices$price - 1))
+        prices_new$price - par, prices_new$gradient,
+        \(change_price, gradient) {
+          2 * sum(change_price * (vctrs::vec_size(gradient) * gradient$price - 1))
         }
       )
     }
