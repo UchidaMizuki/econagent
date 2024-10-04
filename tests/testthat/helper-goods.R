@@ -1,28 +1,44 @@
-get_sector <- function() {
-  list(industry = factor(letters[1:3]),
-       value_added = factor(letters[4:5]))
+get_iotable_dummy <- function() {
+  readRDS(test_path("data", "iotable_dummy.rds"))
 }
 
-get_industry_iotable_regional <- function() {
-  set.seed(1234)
-
-  sector <- get_sector()
-  interindustry <- vctrs::vec_expand_grid(output_sector = sector$industry,
-                                          input_sector = sector$industry) |>
-    dplyr::mutate(price = 1,
-                  quantity = runif(dplyr::n())) |>
+get_industry_iotable_regional <- function(iotable) {
+  inter_industry <- iotable |>
+    dplyr::filter(input_sector_type == "industry",
+                  output_sector_type == "industry") |>
+    dplyr::select(!c("input_sector_type", "output_sector_type")) |>
+    dplyr::rename(input_sector = "input_sector_name",
+                  output_sector = "output_sector_name") |>
+    tibble::add_column(price = 1,
+                       .before = "value") |>
+    dplyr::rename(quantity = value) |>
     goods_by(output_sector, input_sector)
 
-  value_added <- vctrs::vec_expand_grid(output_sector = sector$industry,
-                                       input_sector = sector$value_added) |>
-    dplyr::mutate(price = 1,
-                  quantity = runif(dplyr::n())) |>
+  value_added <- iotable |>
+    dplyr::filter(input_sector_type %in% c("import", "value_added"),
+                  output_sector_type == "industry") |>
+    dplyr::select(!c("input_sector_type", "output_sector_type")) |>
+    dplyr::rename(input_sector = "input_sector_name",
+                  output_sector = "output_sector_name") |>
+    tibble::add_column(price = 1,
+                       .before = "value") |>
+    dplyr::rename(quantity = value) |>
     goods_by(output_sector, input_sector) |>
     goods_compose(util_cobb_douglas(),
                   node = factor("value_added"))
 
-  rbind(interindustry, value_added) |>
-    goods_compose(util_ces(-5))
+  rbind(inter_industry, value_added) |>
+    goods_compose(util_leontief())
+}
+
+get_final_demand_iotable_regional <- function(iotable) {
+  iotable |>
+    dplyr::filter(input_sector_type == "industry",
+                  output_sector_type %in% c("final_demand", "export")) |>
+    dplyr::select(!c("input_sector_type", "output_sector_type")) |>
+    dplyr::summarise(quantity = sum(.data$value),
+                     .by = "input_sector_name") |>
+    dplyr::rename(input_sector = "input_sector_name")
 }
 
 get_prices_industry_iotable_regional <- function(industry_iotable_regional) {

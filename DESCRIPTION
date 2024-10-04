@@ -26,3 +26,5 @@ Imports:
     tibble,
     timbr (>= 0.2.2.9000),
     vctrs
+Depends: 
+    R (>= 2.10)

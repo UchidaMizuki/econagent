@@ -1,7 +1,7 @@
 test_that("goods_reprice() works", {
   set.seed(1234)
 
-  industry <- get_industry_iotable_regional()
+  industry <- get_industry_iotable_regional(iotable = get_iotable_dummy())
   prices <- get_prices_industry_iotable_regional(industry)
 
   analytic <- industry |>
@@ -19,7 +19,7 @@ test_that("goods_reprice() works", {
 test_that("goods_reprice_recursively() works", {
   set.seed(1234)
 
-  industry <- get_industry_iotable_regional()
+  industry <- get_industry_iotable_regional(iotable = get_iotable_dummy())
 
   prices <- get_prices_industry_iotable_regional(industry) |>
     dplyr::filter(.data$input_sector %in% c("a", "b"),

@@ -65,7 +65,7 @@ goods_reprice <- function(data,
 #'
 #' @param data A `econ_goods` object.
 #' @param f A function that returns a data frame with columns `price`.
-#' @param gradient A function that returns a data frame with columns `prices`.
+#' @param gradient A function that returns a data frame with columns `gradient`.
 #' @param ... Additional arguments passed to `stats::optim()`.
 #'
 #' @return A `econ_goods` object.
