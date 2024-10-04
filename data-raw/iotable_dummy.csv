@@ -1,0 +1,9 @@
+,,industry,industry,industry,final_demand,final_demand,export,total
+,,industry_1,industry_2,industry_3,final_demand_1,final_demand_2,export_1,
+industry,industry_1,7,0,5,8,1,6,27
+industry,industry_2,2,5,6,3,6,7,29
+industry,industry_3,3,8,3,4,9,4,31
+import,import_1,8,1,6,9,2,7,
+value_added,value_added_1,3,6,7,,,,
+value_added,value_added_2,4,9,4,,,,
+total,,27,29,31,,,,
