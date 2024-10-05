@@ -15,27 +15,27 @@ knitr::opts_chunk$set(
 )
 ```
 
-# econgoods
+# econagent
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
   
-econgoods provides utility functions and composite goods in economics.
+econagent provides utility functions and composite goods in economics.
 
 ## Installation
 
-You can install the development version of econgoods from [GitHub](https://github.com/) with:
+You can install the development version of econagent from [GitHub](https://github.com/) with:
   
 ``` r
 # install.packages("devtools")
-devtools::install_github("UchidaMizuki/econgoods")
+devtools::install_github("UchidaMizuki/econagent")
 ```
 
 ## Examples for utility functions
 
 ```{r load-libraries, message=FALSE, warning=FALSE}
-library(econgoods)
+library(econagent)
 library(tidyverse)
 ```
 

@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# econgoods
+# econagent
 
 <!-- badges: start -->
 
@@ -9,22 +9,22 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-econgoods provides utility functions and composite goods in economics.
+econagent provides utility functions and composite goods in economics.
 
 ## Installation
 
-You can install the development version of econgoods from
+You can install the development version of econagent from
 [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("UchidaMizuki/econgoods")
+devtools::install_github("UchidaMizuki/econagent")
 ```
 
 ## Examples for utility functions
 
 ``` r
-library(econgoods)
+library(econagent)
 library(tidyverse)
 ```
 
@@ -62,9 +62,6 @@ cobb_douglas
 #>   weights    = [1] 0.6666667 0.3333333
 #>   ...
 #> )
-```
-
-``` r
 leontief <- util_leontief() |> 
   util_calibrate(prices, quantities)
 leontief
@@ -78,9 +75,6 @@ leontief
 #>   weights    = [1] 0.5 0.5
 #>   ...
 #> )
-```
-
-``` r
 ces_minus_1_5 <- util_ces(substitution = -1.5) |> 
   util_calibrate(prices, quantities)
 ces_minus_1_5
@@ -108,9 +102,6 @@ ces_minus_1_5
 ``` r
 util_2goods_indifference(cobb_douglas, cobb_douglas(quantities))(1:6)
 #> [1] 8.0000000 2.0000000 0.8888889 0.5000000 0.3200000 0.2222222
-```
-
-``` r
 util_2goods_budget(prices, income)(1:6)
 #> [1]  4  2  0 -2 -4 -6
 ```
@@ -132,9 +123,6 @@ util_2goods_budget(prices, income)(1:6)
 # Total utility
 util_2goods_utility(cobb_douglas, quantities[[2]])(1:6)
 #> [1]  7.559526 12.000000 15.724448 19.048813 22.104189 24.961006
-```
-
-``` r
 # Marginal utility
 util_2goods_utility(cobb_douglas, quantities[[2]], gradient = TRUE)(1:6)
 #> [1] 5.039684 4.000000 3.494322 3.174802 2.947225 2.773445
@@ -156,17 +144,11 @@ quantities_new <- util_demand(cobb_douglas, prices_new,
                               income = income)
 quantities_new
 #> [1] 4 2
-```
-
-``` r
 # Substitution effect
 quantities_substitution <- util_demand(cobb_douglas, prices_new,
                                        utility = cobb_douglas(quantities))
 quantities_substitution
 #> [1] 2.519842 1.259921
-```
-
-``` r
 # Income effect
 quantities_new - quantities_substitution
 #> [1] 1.480158 0.740079

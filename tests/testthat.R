@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(econgoods)
+library(econagent)
 
-test_check("econgoods")
+test_check("econagent")
