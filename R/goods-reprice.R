@@ -6,6 +6,8 @@
 #' @param gradient Logical input to return the gradient. By default, `FALSE`.
 #'
 #' @return A `econ_goods` object.
+#'
+#' @export
 goods_reprice <- function(data,
                           prices = NULL,
                           gradient = FALSE) {
