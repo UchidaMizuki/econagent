@@ -4,15 +4,13 @@
 \alias{goods_reprice}
 \title{Reprice goods}
 \usage{
-goods_reprice(data, prices = NULL, gradient = FALSE)
+goods_reprice(data, prices = NULL)
 }
 \arguments{
 \item{data}{A \code{econ_goods} object.}
 
 \item{prices}{A data frame or a list of data frames that contains columns
 \code{price}.}
-
-\item{gradient}{Logical input to return the gradient. By default, \code{FALSE}.}
 }
 \value{
 A \code{econ_goods} object.

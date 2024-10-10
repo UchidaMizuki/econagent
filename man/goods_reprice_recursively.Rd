@@ -4,14 +4,12 @@
 \alias{goods_reprice_recursively}
 \title{Reprice goods recursively}
 \usage{
-goods_reprice_recursively(data, f, gradient = NULL, ...)
+goods_reprice_recursively(data, f, ...)
 }
 \arguments{
 \item{data}{A \code{econ_goods} object.}
 
 \item{f}{A function that returns a data frame with columns \code{price}.}
-
-\item{gradient}{A function that returns a data frame with columns \code{gradient}.}
 
 \item{...}{Additional arguments passed to \code{stats::optim()}.}
 }
