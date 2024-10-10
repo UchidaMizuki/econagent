@@ -41,8 +41,8 @@ goods_reprice_recursively <- function(data, f, ...) {
   prices <- f(data)
 
   price <- prices$price
-  reprice <- function(par) {
-    prices$price <- par
+  reprice <- function(price) {
+    prices$price <- price
     data <- goods_reprice(data, prices)
     prices_new <- f(data)
     prices_new$price

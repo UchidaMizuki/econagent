@@ -42,8 +42,8 @@ goods_produce_recursively <- function(data, f, ...) {
   quantities <- f(data)
 
   quantity <- quantities$quantity
-  produce <- function(par) {
-    quantities$quantity <- par
+  produce <- function(quantity) {
+    quantities$quantity <- quantity
     data <- goods_produce(data, quantities)
     quantities_new <- f(data)
     quantities_new$quantity
