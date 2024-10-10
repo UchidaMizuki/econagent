@@ -4,15 +4,13 @@
 \alias{goods_produce}
 \title{Produce goods}
 \usage{
-goods_produce(data, quantities = NULL, gradient = FALSE)
+goods_produce(data, quantities = NULL)
 }
 \arguments{
 \item{data}{A \code{econ_goods} object.}
 
 \item{quantities}{A data frame of a list of data frames that contains columns
 \code{quantity}.}
-
-\item{gradient}{Logical input to return the gradient. By default, \code{FALSE}.}
 }
 \value{
 A \code{econ_goods} object.

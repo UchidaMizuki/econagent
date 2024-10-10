@@ -44,7 +44,8 @@ goods_reprice_recursively <- function(data, f, ...) {
   reprice <- function(par) {
     prices$price <- par
     data <- goods_reprice(data, prices)
-    f(data)$price
+    prices_new <- f(data)
+    prices_new$price
   }
   price <- FixedPoint::FixedPoint(reprice, price, ...) |>
     purrr::chuck("FixedPoint")

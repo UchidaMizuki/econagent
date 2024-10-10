@@ -13,6 +13,7 @@ RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE)
 Suggests: 
     testthat (>= 3.0.0),
+    tibble,
     tidyr
 Config/testthat/edition: 3
 Imports: 
@@ -24,7 +25,6 @@ Imports:
     pillar,
     purrr,
     rlang,
-    tibble,
     timbr (>= 0.2.2.9000),
     vctrs
 Depends: 

@@ -4,14 +4,12 @@
 \alias{goods_produce_recursively}
 \title{Produce goods recursively}
 \usage{
-goods_produce_recursively(data, f, gradient = NULL, ...)
+goods_produce_recursively(data, f, ...)
 }
 \arguments{
 \item{data}{A \code{econ_goods} object.}
 
 \item{f}{A function that returns a data frame with columns \code{quantity}.}
-
-\item{gradient}{A function that returns a data frame with columns \code{gradient}.}
 
 \item{...}{Additional arguments passed to \code{stats::optim()}.}
 }
