@@ -82,17 +82,13 @@ util_demand_hicksian <- function(f, prices, utility,
 #' @export
 util_demand_hicksian.econ_util <- function(f, prices, utility,
                                            gradient = FALSE,
-                                           interval = c(1e-6, 1e6),
-                                           tol = 1e-6,
                                            ...) {
-  income <- stats::uniroot(\(income, ...) util_indirect(f, prices, income, ...) - utility,
-                           interval = interval,
-                           extendInt = "yes",
-                           tol = tol,
-                           ...)$root
+  income <- FixedPoint::FixedPoint(\(income, ...) income / util_indirect(f, prices, income, ...) * utility,
+                                   Inputs = utility,
+                                   ...)$FixedPoint
 
   dots <- rlang::list2(...)
-  dots <- dots[!names(dots) %in% rlang::fn_fmls_names(stats::uniroot)]
+  dots <- dots[!names(dots) %in% rlang::fn_fmls_names(FixedPoint::FixedPoint)]
 
   quantities <- rlang::exec(util_demand_marshallian, f, prices, income, !!!dots)
 
