@@ -48,8 +48,7 @@ goods_produce_recursively <- function(data, f, ...) {
     quantities_new <- f(data)
     quantities_new$quantity
   }
-  quantity <- FixedPoint::FixedPoint(produce, quantity, ...) |>
-    purrr::chuck("FixedPoint")
+  quantity <- fixed_point_positive(produce, quantity, ...)
 
   quantities$quantity <- quantity
   goods_produce(data, quantities)

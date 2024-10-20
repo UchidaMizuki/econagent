@@ -83,9 +83,9 @@ util_demand_hicksian <- function(f, prices, utility,
 util_demand_hicksian.econ_util <- function(f, prices, utility,
                                            gradient = FALSE,
                                            ...) {
-  income <- FixedPoint::FixedPoint(\(income, ...) income / util_indirect(f, prices, income, ...) * utility,
-                                   Inputs = utility,
-                                   ...)$FixedPoint
+  income <- fixed_point_positive(\(income, ...) income / util_indirect(f, prices, income, ...) * utility,
+                                 x = utility,
+                                 ...)
 
   dots <- rlang::list2(...)
   dots <- dots[!names(dots) %in% rlang::fn_fmls_names(FixedPoint::FixedPoint)]

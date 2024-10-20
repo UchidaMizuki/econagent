@@ -47,8 +47,7 @@ goods_reprice_recursively <- function(data, f, ...) {
     prices_new <- f(data)
     prices_new$price
   }
-  price <- FixedPoint::FixedPoint(reprice, price, ...) |>
-    purrr::chuck("FixedPoint")
+  price <- fixed_point_positive(reprice, price, ...)
   prices$price <- price
   goods_reprice(data, prices)
 }

@@ -52,8 +52,7 @@ goods_consume_recursively <- function(data, f, ...) {
     incomes_new <- f(data)
     incomes_new$income
   }
-  income <- FixedPoint::FixedPoint(consume, income, ...) |>
-    purrr::chuck("FixedPoint")
+  income <- fixed_point_positive(consume, income, ...)
 
   incomes$income <- income
   goods_consume(data, incomes)
