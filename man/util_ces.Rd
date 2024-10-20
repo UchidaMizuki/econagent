@@ -2,10 +2,19 @@
 % Please edit documentation in R/util-ces.R
 \name{util_ces}
 \alias{util_ces}
+\alias{util_ces2}
 \title{Constant elasticity of substitution (CES) utility function}
 \usage{
 util_ces(
   substitution,
+  homogeneity = 1,
+  efficiency = NA_real_,
+  weights = double(),
+  homothetic = homogeneity == 1
+)
+
+util_ces2(
+  elasticity_of_substitution,
   homogeneity = 1,
   efficiency = NA_real_,
   weights = double(),
@@ -22,7 +31,10 @@ util_ces(
 
 \item{weights}{A numeric vector of weights.}
 
-\item{homothetic}{A logical scalar. By default, \code{TRUE}.}
+\item{homothetic}{A logical scalar. By default, \code{homogeneity == 1}.}
+
+\item{elasticity_of_substitution}{A scalar numeric of elasticity of
+substitution.}
 }
 \value{
 A \code{util_ces} object.
