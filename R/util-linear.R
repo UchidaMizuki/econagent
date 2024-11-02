@@ -53,8 +53,3 @@ util_demand_marshallian.util_linear <- function(f, prices, income,
 type_sum.util_linear <- function(x) {
   "Linear"
 }
-
-#' @export
-obj_sum.util_linear <- function(x) {
-  type_sum(x)
-}

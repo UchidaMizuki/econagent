@@ -185,3 +185,8 @@ util_indirect <- function(f, prices, income,
     f(util_demand_marshallian(f, prices, income, ...))
   }
 }
+
+#' @export
+obj_sum.econ_util <- function(x) {
+  type_sum(x)
+}
