@@ -7,7 +7,8 @@
 goods_by(.data, ...)
 }
 \arguments{
-\item{.data}{A data frame that contains columns \code{price} and \code{quantity}.}
+\item{.data}{A data frame that contains columns \code{price} and \code{quantity}. If
+\code{price} is not available, it will be created with a value of 1.}
 
 \item{...}{Variables to group by.}
 }
