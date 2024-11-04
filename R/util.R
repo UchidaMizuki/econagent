@@ -186,6 +186,27 @@ util_indirect <- function(f, prices, income,
   }
 }
 
+#' Price function
+#'
+#' `r lifecycle::badge("experimental")`
+#'
+#' @param f A `econ_util` object.
+#' @param prices A numeric vector of prices.
+#' @param quantities A numeric vector of quantities.
+#' @param ... Additional arguments.
+#'
+#' @return A numeric scalar of price.
+#'
+#' @export
+util_price <- function(f, prices, quantities, ...) {
+  UseMethod("util_price")
+}
+
+#' @export
+util_price.econ_util <- function(f, prices, quantities, ...) {
+  sum(prices * quantities) / f(quantities, ...)
+}
+
 #' @export
 obj_sum.econ_util <- function(x) {
   type_sum(x)

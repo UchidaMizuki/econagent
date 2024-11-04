@@ -16,6 +16,7 @@ goods_by <- function(.data, ...) {
   .data |>
     timbr::forest_by(...) |>
     dplyr::select("price", "quantity") |>
+    dplyr::mutate(utility = list(NULL)) |>
     add_goods_class()
 }
 
@@ -55,13 +56,13 @@ goods_compose <- function(data, utility,
         purrr::pmap(\(utility, prices, quantities) {
           util_calibrate(utility, prices, quantities)
         }),
+      price = list(.data$utility, .data$prices, .data$quantities) |>
+        purrr::pmap_dbl(\(utility, prices, quantities) {
+          util_price(utility, prices, quantities)
+        }),
       quantity = list(.data$utility, .data$quantities) |>
         purrr::pmap_dbl(\(utility, quantities) {
           utility(quantities)
-        }),
-      price = list(.data$prices, .data$quantities, .data$quantity) |>
-        purrr::pmap_dbl(\(prices, quantities, quantity) {
-          sum(prices * quantities) / quantity
         })
     ) |>
     dplyr::select(!c("prices", "quantities")) |>
