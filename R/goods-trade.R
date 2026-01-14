@@ -1,7 +1,7 @@
 #' Iceberg trade cost
 #'
 #' @param data A `econ_goods` object.
-#' @param trade A `tibble` object with `cost` column.
+#' @param trade A data frame with `cost` column.
 #'
 #' @return A `econ_goods` object.
 #'
@@ -27,4 +27,20 @@ goods_trade_iceberg <- function(data, trade) {
 
   data |>
     goods_compose(utility)
+}
+
+#' Update trade cost
+#'
+#' @param data A `econ_goods` object.
+#' @param trade A data frame with `cost` column.
+#'
+#' @return A `econ_goods` object.
+#'
+#' @export
+goods_trade_update <- function(data, trade) {
+  trade <- trade |>
+    dplyr::rename_with(~ "cost",
+                       dplyr::last_col(1))
+  data |>
+    goods_update(trade)
 }
