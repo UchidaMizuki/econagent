@@ -9,7 +9,8 @@ goods_compose(data, utility, node = NULL)
 \arguments{
 \item{data}{A \code{econ_goods} object.}
 
-\item{utility}{A \code{econ_util} object.}
+\item{utility}{A \code{econ_util} object or a data frame that contains columns
+\code{utility}.}
 
 \item{node}{A node name for composition goods. By default, it is \code{NULL}.}
 }

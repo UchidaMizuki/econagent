@@ -77,8 +77,3 @@ util_demand_marshallian.util_cobb_douglas <- function(f, prices, income,
 type_sum.util_cobb_douglas <- function(x) {
   "Cobb-Douglas"
 }
-
-#' @export
-obj_sum.util_cobb_douglas <- function(x) {
-  type_sum(x)
-}

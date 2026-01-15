@@ -3,7 +3,7 @@ get_iotable_dummy <- function() {
 }
 
 get_industry_iotable_regional <- function(iotable) {
-  inter_industry <- iotable |>
+  intermediate_input <- iotable |>
     dplyr::filter(input_sector_type == "industry",
                   output_sector_type == "industry") |>
     dplyr::select(!c("input_sector_type", "output_sector_type")) |>
@@ -27,7 +27,7 @@ get_industry_iotable_regional <- function(iotable) {
     goods_compose(util_cobb_douglas(),
                   node = factor("value_added"))
 
-  rbind(inter_industry, value_added) |>
+  rbind(intermediate_input, value_added) |>
     goods_compose(util_leontief())
 }
 
