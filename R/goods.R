@@ -30,24 +30,24 @@ goods_by <- function(.data, ...) {
 #' @return A `econ_goods` object.
 #'
 #' @export
-goods_compose <- function(data, utility,
-                          node = NULL) {
+goods_compose <- function(data, utility, node = NULL) {
   data <- data |>
-    dplyr::summarise(prices = .data$price |>
-                       rlang::set_names(timbr::node_value()) |>
-                       list(),
-                     quantities = .data$quantity |>
-                       rlang::set_names(timbr::node_value()) |>
-                       list(),
-                     .node = node)
+    dplyr::summarise(
+      prices = .data$price |>
+        rlang::set_names(timbr::node_value()) |>
+        list(),
+      quantities = .data$quantity |>
+        rlang::set_names(timbr::node_value()) |>
+        list(),
+      .node = node
+    )
 
   if (inherits(utility, "econ_util")) {
     data <- data |>
       dplyr::mutate(utility = list(.env$utility))
   } else {
     data <- data |>
-      dplyr::rows_update(utility,
-                         by = setdiff(names(utility), "utility"))
+      dplyr::rows_update(utility, by = setdiff(names(utility), "utility"))
   }
 
   data |>

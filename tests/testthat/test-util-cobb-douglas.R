@@ -9,25 +9,16 @@ test_that("Homothetic Cobb-Douglas utility works", {
   utility <- runif(1)
 
   f <- util_cobb_douglas() |>
-    util_calibrate(prices = prices,
-                   quantities = quantities)
+    util_calibrate(prices = prices, quantities = quantities)
 
   test_util_calibrate(f, prices, quantities)
-  test_util_demand(f, prices,
-                   income = income,
-                   utility = utility)
-  test_util_expenditure(f, prices,
-                        utility = utility)
-  test_util_indirect(f, prices,
-                     income = income)
+  test_util_demand(f, prices, income = income, utility = utility)
+  test_util_expenditure(f, prices, utility = utility)
+  test_util_indirect(f, prices, income = income)
   test_util_gradient(f, quantities)
-  test_util_demand_gradient(f, prices,
-                            income = income,
-                            utility = utility)
-  test_util_expenditure_gradient(f, prices,
-                                 utility = utility)
-  test_util_indirect_gradient(f, prices,
-                              income = income)
+  test_util_demand_gradient(f, prices, income = income, utility = utility)
+  test_util_expenditure_gradient(f, prices, utility = utility)
+  test_util_indirect_gradient(f, prices, income = income)
 })
 
 test_that("Non-homothetic Cobb-Douglas utility works", {
@@ -44,23 +35,20 @@ test_that("Non-homothetic Cobb-Douglas utility works", {
   weights <- runif(size)
   weights[quantities == 0] <- 0
 
-  f <- util_cobb_douglas(efficiency = efficiency,
-                         weights = weights)
+  f <- util_cobb_douglas(efficiency = efficiency, weights = weights)
 
-  test_util_demand(f, prices,
-                   income = income,
-                   utility = utility)
-  test_util_expenditure(f, prices,
-                        utility = utility)
-  test_util_indirect(f, prices,
-                     income = income)
+  test_util_demand(f, prices, income = income, utility = utility)
+  test_util_expenditure(f, prices, utility = utility)
+  test_util_indirect(f, prices, income = income)
   test_util_gradient(f, quantities)
-  test_util_demand_gradient(f, prices,
-                            income = income,
-                            utility = utility,
-                            type = "marshallian")
+  test_util_demand_gradient(
+    f,
+    prices,
+    income = income,
+    utility = utility,
+    type = "marshallian"
+  )
   # test_util_expenditure_gradient(f, prices,
   #                                utility = utility)
-  test_util_indirect_gradient(f, prices,
-                              income = income)
+  test_util_indirect_gradient(f, prices, income = income)
 })

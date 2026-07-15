@@ -9,7 +9,6 @@ Description: Provides utility functions and composite goods for building
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE)
 Suggests: 
     testthat (>= 3.0.0),
@@ -21,11 +20,14 @@ Imports:
     dplyr,
     FixedPoint,
     lifecycle,
-    partialised,
+    adverbial,
     pillar,
     purrr,
     rlang,
     timbr (>= 0.2.2.9000),
     vctrs
-Depends: 
+Depends:
     R (>= 2.10)
+Remotes:
+    uchidamizuki/timbr
+Config/roxygen2/version: 8.0.0

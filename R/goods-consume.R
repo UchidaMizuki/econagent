@@ -7,8 +7,7 @@
 #' @return A `econ_goods` object.
 #'
 #' @export
-goods_consume <- function(data,
-                          incomes = NULL) {
+goods_consume <- function(data, incomes = NULL) {
   if (is.data.frame(incomes)) {
     incomes <- list(incomes)
   }
@@ -17,20 +16,23 @@ goods_consume <- function(data,
     dplyr::mutate(income = .data$price * .data$quantity)
   for (i in seq_along(incomes)) {
     data <- data |>
-      dplyr::rows_update(incomes[[i]],
-                         by = setdiff(names(incomes[[i]]), "income"))
+      dplyr::rows_update(
+        incomes[[i]],
+        by = setdiff(names(incomes[[i]]), "income")
+      )
   }
 
   data |>
     dplyr::mutate(quantity = .data$income / .data$price) |>
     dplyr::select(!"income") |>
-    timbr::traverse(\(x, y) {
-      quantities <- util_demand(y$utility[[1]], x$price,
-                                utility = y$quantity)
-      x$quantity <- quantities
-      x
-    },
-    .climb = TRUE)
+    timbr::traverse(
+      \(x, y) {
+        quantities <- util_demand(y$utility[[1]], x$price, utility = y$quantity)
+        x$quantity <- quantities
+        x
+      },
+      .climb = TRUE
+    )
 }
 
 #' Consume goods recursively

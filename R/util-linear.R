@@ -7,8 +7,7 @@
 #' @return A `util_linear` object.
 #'
 #' @export
-util_linear <- function(efficiency = NA_real_,
-                        weights = double()) {
+util_linear <- function(efficiency = NA_real_, weights = double()) {
   check_efficiency_nonnegative(efficiency)
   check_weights_nonnegative(weights)
 
@@ -16,10 +15,12 @@ util_linear <- function(efficiency = NA_real_,
     efficiency * sum(weights * quantities)
   }
 
-  new_util_homothetic(f,
-                      efficiency = efficiency,
-                      weights = weights,
-                      class = "util_linear")
+  new_util_homothetic(
+    f,
+    efficiency = efficiency,
+    weights = weights,
+    class = "util_linear"
+  )
 }
 
 #' @export
@@ -30,9 +31,13 @@ util_gradient.util_linear <- function(f, quantities, ...) {
 }
 
 #' @export
-util_demand_marshallian.util_linear <- function(f, prices, income,
-                                                gradient = FALSE,
-                                                ...) {
+util_demand_marshallian.util_linear <- function(
+  f,
+  prices,
+  income,
+  gradient = FALSE,
+  ...
+) {
   rlang::check_dots_empty()
 
   loc_demand <- which.max(f$weights / prices)
@@ -40,7 +45,8 @@ util_demand_marshallian.util_linear <- function(f, prices, income,
 
   if (gradient) {
     gradient_quantities <- matrix(0, size, size)
-    gradient_quantities[loc_demand, loc_demand] <- -income / prices[loc_demand] ^ 2
+    gradient_quantities[loc_demand, loc_demand] <- -income /
+      prices[loc_demand]^2
     gradient_quantities
   } else {
     quantities <- rep(0, size)

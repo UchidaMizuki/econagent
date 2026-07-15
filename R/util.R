@@ -7,11 +7,9 @@
 #' @return A `econ_util` object.
 #'
 #' @export
-new_util <- function(f, ...,
-                     class = character()) {
+new_util <- function(f, ..., class = character()) {
   dots <- rlang::list2(...)
-  partialised::new_partialised(f, dots,
-                               class = c(class, "econ_util"))
+  adverbial::new_partialised(f, dots, class = c(class, "econ_util"))
 }
 
 #' Gradient of a utility function
@@ -53,9 +51,7 @@ util_calibrate <- function(f, prices, quantities, ...) {
 #' `gradient = TRUE`, a numeric matrix of gradients of quantities related to prices.
 #'
 #' @export
-util_demand_marshallian <- function(f, prices, income,
-                                    gradient = FALSE,
-                                    ...) {
+util_demand_marshallian <- function(f, prices, income, gradient = FALSE, ...) {
   vctrs::vec_check_size(income, 1)
   UseMethod("util_demand_marshallian")
 }
@@ -72,20 +68,24 @@ util_demand_marshallian <- function(f, prices, income,
 #' `gradient = TRUE`, a numeric matrix of gradients of quantities related to prices.
 #'
 #' @export
-util_demand_hicksian <- function(f, prices, utility,
-                                 gradient = FALSE,
-                                 ...) {
+util_demand_hicksian <- function(f, prices, utility, gradient = FALSE, ...) {
   vctrs::vec_check_size(utility, 1)
   UseMethod("util_demand_hicksian")
 }
 
 #' @export
-util_demand_hicksian.econ_util <- function(f, prices, utility,
-                                           gradient = FALSE,
-                                           ...) {
-  income <- fixed_point_positive(\(income, ...) income / util_indirect(f, prices, income, ...) * utility,
-                                 x = utility,
-                                 ...)
+util_demand_hicksian.econ_util <- function(
+  f,
+  prices,
+  utility,
+  gradient = FALSE,
+  ...
+) {
+  income <- fixed_point_positive(
+    \(income, ...) income / util_indirect(f, prices, income, ...) * utility,
+    x = utility,
+    ...
+  )
 
   dots <- rlang::list2(...)
   dots <- dots[!names(dots) %in% rlang::fn_fmls_names(FixedPoint::FixedPoint)]
@@ -118,21 +118,20 @@ util_demand_hicksian.econ_util <- function(f, prices, utility,
 #' `gradient = TRUE`, a numeric matrix of gradients of quantities related to prices.
 #'
 #' @export
-util_demand <- function(f, prices,
-                        income = NULL,
-                        utility = NULL,
-                        gradient = FALSE,
-                        ...) {
+util_demand <- function(
+  f,
+  prices,
+  income = NULL,
+  utility = NULL,
+  gradient = FALSE,
+  ...
+) {
   if (!is.null(income) && !is.null(utility)) {
     cli::cli_abort("Either {.arg income} or {.arg utility} must be NULL.")
   } else if (!is.null(income)) {
-    util_demand_marshallian(f, prices, income,
-                            gradient = gradient,
-                            ...)
+    util_demand_marshallian(f, prices, income, gradient = gradient, ...)
   } else if (!is.null(utility)) {
-    util_demand_hicksian(f, prices, utility,
-                         gradient = gradient,
-                         ...)
+    util_demand_hicksian(f, prices, utility, gradient = gradient, ...)
   } else {
     cli::cli_abort("Either {.arg income} or {.arg utility} must be provided.")
   }
@@ -151,12 +150,13 @@ util_demand <- function(f, prices,
 #' prices.
 #'
 #' @export
-util_expenditure <- function(f, prices, utility,
-                             gradient = FALSE,
-                             ...) {
+util_expenditure <- function(f, prices, utility, gradient = FALSE, ...) {
   if (gradient) {
     util_demand_hicksian(f, prices, utility, ...) +
-      as.double(prices %*% util_demand_hicksian(f, prices, utility, gradient = TRUE, ...))
+      as.double(
+        prices %*%
+          util_demand_hicksian(f, prices, utility, gradient = TRUE, ...)
+      )
   } else {
     sum(prices * util_demand_hicksian(f, prices, utility, ...))
   }
@@ -175,12 +175,12 @@ util_expenditure <- function(f, prices, utility,
 #' prices.
 #'
 #' @export
-util_indirect <- function(f, prices, income,
-                          gradient = FALSE,
-                          ...) {
+util_indirect <- function(f, prices, income, gradient = FALSE, ...) {
   if (gradient) {
-    as.double(util_gradient(f, util_demand_marshallian(f, prices, income, ...)) %*%
-                util_demand_marshallian(f, prices, income, gradient = TRUE, ...))
+    as.double(
+      util_gradient(f, util_demand_marshallian(f, prices, income, ...)) %*%
+        util_demand_marshallian(f, prices, income, gradient = TRUE, ...)
+    )
   } else {
     f(util_demand_marshallian(f, prices, income, ...))
   }

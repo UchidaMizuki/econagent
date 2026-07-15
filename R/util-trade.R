@@ -2,9 +2,7 @@ util_trade_iceberg <- function(cost) {
   f <- function(quantities, cost) {
     quantities / cost
   }
-  new_util_homothetic(f,
-                      cost = cost,
-                      class = "util_trade_iceberg")
+  new_util_homothetic(f, cost = cost, class = "util_trade_iceberg")
 }
 
 #' @export
@@ -22,13 +20,17 @@ util_calibrate.util_trade_iceberg <- function(f, prices, quantities, ...) {
 }
 
 #' @export
-util_demand_marshallian.util_trade_iceberg <- function(f, prices, income,
-                                                       gradient = FALSE,
-                                                       ...) {
+util_demand_marshallian.util_trade_iceberg <- function(
+  f,
+  prices,
+  income,
+  gradient = FALSE,
+  ...
+) {
   rlang::check_dots_empty()
 
   if (gradient) {
-    diag(income * -prices ^ -2)
+    diag(income * -prices^-2)
   } else {
     income / prices
   }

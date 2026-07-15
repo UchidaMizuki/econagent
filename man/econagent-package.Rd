@@ -11,5 +11,10 @@ Provides utility functions and composite goods for building economic models.
 \author{
 \strong{Maintainer}: Mizuki Uchida \email{uchidamizuki@vivaldi.net}
 
+Authors:
+\itemize{
+  \item Mizuki Uchida \email{uchidamizuki@vivaldi.net}
+}
+
 }
 \keyword{internal}

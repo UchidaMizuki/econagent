@@ -9,23 +9,15 @@ test_that("Leontief utility works", {
   utility <- runif(1)
 
   f <- util_leontief() |>
-    util_calibrate(prices = prices,
-                   quantities = quantities)
+    util_calibrate(prices = prices, quantities = quantities)
 
   test_util_calibrate(f, prices, quantities)
-  test_util_demand(f, prices,
-                   income = income,
-                   utility = utility)
-  test_util_expenditure(f, prices,
-                        utility = utility)
-  test_util_indirect(f, prices,
-                     income = income)
+  test_util_demand(f, prices, income = income, utility = utility)
+  test_util_expenditure(f, prices, utility = utility)
+  test_util_indirect(f, prices, income = income)
   # test_util_gradient(f, quantities)
-  test_util_demand_gradient(f, prices,
-                            income = income,
-                            utility = utility)
-  test_util_expenditure_gradient(f, prices,
-                                 utility = utility)
+  test_util_demand_gradient(f, prices, income = income, utility = utility)
+  test_util_expenditure_gradient(f, prices, utility = utility)
   # test_util_indirect_gradient(f, prices,
   #                             income = income)
 })

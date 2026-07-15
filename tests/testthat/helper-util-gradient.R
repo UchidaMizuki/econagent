@@ -1,58 +1,48 @@
 test_util_gradient <- function(f, quantities) {
   analytic <- util_gradient(f, quantities)
   numerical <- util_gradient_numerical(f, quantities)
-  expect_equal(analytic, numerical,
-               tolerance = 1e-6)
+  expect_equal(analytic, numerical, tolerance = 1e-6)
 }
 
-test_util_demand_gradient <- function(f, prices, income, utility, ...,
-                                      type = c("marshallian", "hicksian")) {
+test_util_demand_gradient <- function(
+  f,
+  prices,
+  income,
+  utility,
+  ...,
+  type = c("marshallian", "hicksian")
+) {
   if ("marshallian" %in% type) {
-    analytic <- util_demand(f, prices,
-                            income = income,
-                            gradient = TRUE,
-                            ...)
-    numerical <- util_demand_gradient_numerical(f, prices,
-                                                income = income,
-                                                ...)
-    expect_equal(analytic, numerical,
-                 tolerance = 1e-6)
+    analytic <- util_demand(f, prices, income = income, gradient = TRUE, ...)
+    numerical <- util_demand_gradient_numerical(f, prices, income = income, ...)
+    expect_equal(analytic, numerical, tolerance = 1e-6)
   }
 
   if ("hicksian" %in% type) {
-    analytic <- util_demand(f, prices,
-                            utility = utility,
-                            gradient = TRUE,
-                            ...)
-    numerical <- util_demand_gradient_numerical(f, prices,
-                                                utility = utility,
-                                                ...)
-    expect_equal(analytic, numerical,
-                 tolerance = 1e-6)
+    analytic <- util_demand(f, prices, utility = utility, gradient = TRUE, ...)
+    numerical <- util_demand_gradient_numerical(
+      f,
+      prices,
+      utility = utility,
+      ...
+    )
+    expect_equal(analytic, numerical, tolerance = 1e-6)
   }
 }
 
 test_util_expenditure_gradient <- function(f, prices, utility, ...) {
-  analytic <- util_expenditure(f, prices, utility,
-                               gradient = TRUE,
-                               ...)
+  analytic <- util_expenditure(f, prices, utility, gradient = TRUE, ...)
   numerical <- util_expenditure_gradient_numerical(f, prices, utility, ...)
-  expect_equal(analytic, numerical,
-               tolerance = 1e-6)
+  expect_equal(analytic, numerical, tolerance = 1e-6)
 }
 
 test_util_indirect_gradient <- function(f, prices, income, ...) {
-  analytic <- util_indirect(f, prices, income,
-                            gradient = TRUE,
-                            ...)
+  analytic <- util_indirect(f, prices, income, gradient = TRUE, ...)
   numerical <- util_indirect_gradient_numerical(f, prices, income, ...)
-  expect_equal(analytic, numerical,
-               tolerance = 1e-6)
+  expect_equal(analytic, numerical, tolerance = 1e-6)
 }
 
-util_gradient_numerical <- function(f, quantities,
-                                    h = 1e-6,
-                                    ...) {
+util_gradient_numerical <- function(f, quantities, h = 1e-6, ...) {
   size <- length(quantities)
   gradient <- double(size)
 
@@ -68,11 +58,14 @@ util_gradient_numerical <- function(f, quantities,
   gradient
 }
 
-util_demand_gradient_numerical <- function(f, prices,
-                                           income = NULL,
-                                           utility = NULL,
-                                           h = 1e-6,
-                                           ...) {
+util_demand_gradient_numerical <- function(
+  f,
+  prices,
+  income = NULL,
+  utility = NULL,
+  h = 1e-6,
+  ...
+) {
   size <- length(prices)
   gradient <- matrix(NA_real_, size, size)
 
@@ -81,22 +74,32 @@ util_demand_gradient_numerical <- function(f, prices,
     prices_plus[[i]] <- prices_plus[[i]] + h
     prices_minus[[i]] <- prices_minus[[i]] - h
 
-    quantities_plus <- util_demand(f, prices_plus,
-                                   income = income,
-                                   utility = utility,
-                                   ...)
-    quantities_minus <- util_demand(f, prices_minus,
-                                    income = income,
-                                    utility = utility,
-                                    ...)
+    quantities_plus <- util_demand(
+      f,
+      prices_plus,
+      income = income,
+      utility = utility,
+      ...
+    )
+    quantities_minus <- util_demand(
+      f,
+      prices_minus,
+      income = income,
+      utility = utility,
+      ...
+    )
     gradient[, i] <- (quantities_plus - quantities_minus) / (2 * h)
   }
   gradient
 }
 
-util_expenditure_gradient_numerical <- function(f, prices, utility,
-                                                h = 1e-6,
-                                                ...) {
+util_expenditure_gradient_numerical <- function(
+  f,
+  prices,
+  utility,
+  h = 1e-6,
+  ...
+) {
   size <- length(prices)
   gradient <- double(size)
 
@@ -112,9 +115,7 @@ util_expenditure_gradient_numerical <- function(f, prices, utility,
   gradient
 }
 
-util_indirect_gradient_numerical <- function(f, prices, income,
-                                             h = 1e-6,
-                                             ...) {
+util_indirect_gradient_numerical <- function(f, prices, income, h = 1e-6, ...) {
   size <- length(prices)
   gradient <- double(size)
 

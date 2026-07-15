@@ -7,26 +7,28 @@
 #' @return A `econ_goods` object.
 #'
 #' @export
-goods_produce <- function(data,
-                          quantities = NULL) {
+goods_produce <- function(data, quantities = NULL) {
   if (is.data.frame(quantities)) {
     quantities <- list(quantities)
   }
 
   for (i in seq_along(quantities)) {
     data <- data |>
-      dplyr::rows_update(quantities[[i]],
-                         by = setdiff(names(quantities[[i]]), "quantity"))
+      dplyr::rows_update(
+        quantities[[i]],
+        by = setdiff(names(quantities[[i]]), "quantity")
+      )
   }
 
   data |>
-    timbr::traverse(\(x, y) {
-      quantities <- util_demand(y$utility[[1]], x$price,
-                                utility = y$quantity)
-      x$quantity <- quantities
-      x
-    },
-    .climb = TRUE)
+    timbr::traverse(
+      \(x, y) {
+        quantities <- util_demand(y$utility[[1]], x$price, utility = y$quantity)
+        x$quantity <- quantities
+        x
+      },
+      .climb = TRUE
+    )
 }
 
 #' Produce goods recursively

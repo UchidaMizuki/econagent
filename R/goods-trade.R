@@ -10,15 +10,15 @@ goods_trade_iceberg <- function(data, trade) {
   utility <- data |>
     dplyr::select(!c("price", "quantity")) |>
     dplyr::mutate(cost = 1) |>
-    dplyr::rows_update(trade,
-                       by = setdiff(names(trade), "cost")) |>
+    dplyr::rows_update(trade, by = setdiff(names(trade), "cost")) |>
     tibble::as_tibble() |>
     dplyr::ungroup() |>
-    dplyr::mutate(utility = .data$cost |>
-                    purrr::map(util_trade_iceberg),
-                  .keep = "unused") |>
-    dplyr::rename_with(~ "trade",
-                       dplyr::last_col(1))
+    dplyr::mutate(
+      utility = .data$cost |>
+        purrr::map(util_trade_iceberg),
+      .keep = "unused"
+    ) |>
+    dplyr::rename_with(~"trade", dplyr::last_col(1))
   data$roots <- data$roots |>
     dplyr::ungroup() |>
     dplyr::mutate(trade = utility$trade) |>
@@ -39,8 +39,7 @@ goods_trade_iceberg <- function(data, trade) {
 #' @export
 goods_trade_update <- function(data, trade) {
   trade <- trade |>
-    dplyr::rename_with(~ "cost",
-                       dplyr::last_col(1))
+    dplyr::rename_with(~"cost", dplyr::last_col(1))
   data |>
     goods_update(trade)
 }

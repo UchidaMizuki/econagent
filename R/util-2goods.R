@@ -34,11 +34,14 @@ util_2goods_budget <- function(prices, income) {
 #' returns a scalar numeric of quantity of good Y.
 #'
 #' @export
-util_2goods_indifference <- function(f, utility,
-                                     otherwise = NA_real_,
-                                     interval = c(1e-6, 1e6),
-                                     tol = 1e-6,
-                                     ...) {
+util_2goods_indifference <- function(
+  f,
+  utility,
+  otherwise = NA_real_,
+  interval = c(1e-6, 1e6),
+  tol = 1e-6,
+  ...
+) {
   vctrs::vec_check_size(utility, 1)
 
   function(quantity, axis = 1) {
@@ -79,8 +82,7 @@ util_2goods_indifference <- function(f, utility,
 #' utility (`gradient = FALSE`).
 #'
 #' @export
-util_2goods_utility <- function(f, quantity,
-                                gradient = FALSE) {
+util_2goods_utility <- function(f, quantity, gradient = FALSE) {
   vctrs::vec_check_size(quantity, 1)
   quantity_fixed <- quantity
 

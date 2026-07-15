@@ -7,8 +7,7 @@
 #'
 #' @export
 goods_update <- function(data, value) {
-  by <- timbr_common_by(x = data,
-                        y = value)
+  by <- timbr_common_by(x = data, y = value)
   names_data <- timbr_names(data)
   names_value <- names(value)
 
@@ -20,27 +19,29 @@ goods_update <- function(data, value) {
 
   names_value <- intersect(names_value, names_data)
   data <- data |>
-    dplyr::rows_update(value[c(by, names_value)],
-                       by = by)
+    dplyr::rows_update(value[c(by, names_value)], by = by)
   data
 }
 
 goods_update_utility <- function(data, name, value) {
   value[[name]] <- as.list(value[[name]])
   data <- data |>
-    dplyr::mutate(!!name := .data$utility |>
-                    purrr::map(\(x) {
-                      x[[name]]
-                    })) |>
-    dplyr::rows_update(value,
-                       by = setdiff(names(value), name))
+    dplyr::mutate(
+      !!name := .data$utility |>
+        purrr::map(\(x) {
+          x[[name]]
+        })
+    ) |>
+    dplyr::rows_update(value, by = setdiff(names(value), name))
   data$graph <- data$graph |>
     tidygraph::activate("nodes") |>
-    dplyr::mutate(utility = list(.data$utility, .data[[name]]) |>
-                    purrr::pmap(\(utility, value) {
-                      utility[[name]] <- value
-                      utility
-                    })) |>
+    dplyr::mutate(
+      utility = list(.data$utility, .data[[name]]) |>
+        purrr::pmap(\(utility, value) {
+          utility[[name]] <- value
+          utility
+        })
+    ) |>
     dplyr::select(!dplyr::all_of(name))
   data
 }
