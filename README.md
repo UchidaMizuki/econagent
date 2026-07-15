@@ -35,6 +35,8 @@ library(tidyverse)
   - `util_leontief()`: Leontief utility function
   - `util_ces()`: Constant elasticity of substitution (CES) utility
     function
+  - `util_cet()`: Constant elasticity of transformation (CET) utility
+    function
 - `util_calibrate()`: Fit parameters of utility functions to the given
   prices and quantities.
 

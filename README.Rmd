@@ -45,7 +45,8 @@ library(tidyverse)
   - `util_cobb_douglas()`: Cobb-Douglas utility function
   - `util_leontief()`: Leontief utility function
   - `util_ces()`: Constant elasticity of substitution (CES) utility function
-- `util_calibrate()`: Fit parameters of utility functions to the given prices 
+  - `util_cet()`: Constant elasticity of transformation (CET) utility function
+- `util_calibrate()`: Fit parameters of utility functions to the given prices
 and quantities.
 
 ```{r calibrate-utility-functions-sample-data}
