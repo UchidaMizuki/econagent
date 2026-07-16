@@ -7,7 +7,8 @@
 #'
 #' @export
 goods_update <- function(data, value) {
-  by <- timbr_common_by(x = data, y = value)
+  by <- purrr::quietly(timbr:::timbr_common_by)(x = data, y = value) |>
+    purrr::chuck("result")
   names_data <- timbr_names(data)
   names_value <- names(value)
 

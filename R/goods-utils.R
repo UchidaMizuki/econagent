@@ -9,22 +9,7 @@ fixed_point_positive <- function(f, x, ...) {
 }
 
 timbr_names <- function(x) {
-  names <- x$graph |>
-    tidygraph::activate("nodes") |>
-    tibble::as_tibble() |>
+  timbr:::get_nodes(x) |>
+    timbr:::drop_node() |>
     names()
-  setdiff(names, ".")
-}
-
-timbr_common_by <- function(by = NULL, x, y) {
-  if (!is.null(by)) {
-    return(by)
-  }
-  names_x <- c(
-    setdiff(names(x$roots), "."),
-    data$graph |>
-      dplyr::mutate(node_name = timbr::node_name()) |>
-      dplyr::pull("node_name")
-  )
-  intersect(names(y), names_x)
 }

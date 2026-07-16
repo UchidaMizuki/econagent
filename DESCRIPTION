@@ -24,6 +24,7 @@ Imports:
     pillar,
     purrr,
     rlang,
+    tidygraph,
     timbr (>= 0.2.2.9000),
     vctrs
 Depends:
