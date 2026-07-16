@@ -1,5 +1,6 @@
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+<!-- README.md is generated from README.qmd. Please edit that file -->
 
 # econagent
 
@@ -51,46 +52,50 @@ quantities <- c(quantity_x, quantity_y)
 ```
 
 ``` r
-cobb_douglas <- util_cobb_douglas() |> 
+cobb_douglas <- util_cobb_douglas() |>
   util_calibrate(prices, quantities)
 cobb_douglas
 #> <Cobb-Douglas>
-#> function (quantities, efficiency, weights) 
-#> {
+#> function(quantities, efficiency, weights) {
 #>     efficiency * prod(quantities^weights, na.rm = TRUE)
-#> }
+#>   }
+#> <bytecode: 0x000002221d214f20>
+#> <environment: 0x000002221d21ad28>
 #> (
 #>   efficiency = 6
-#>   weights    = [1] 0.6666667 0.3333333
+#>   weights =    [1] 0.6666667 0.3333333
 #>   ...
 #> )
-leontief <- util_leontief() |> 
+leontief <- util_leontief() |>
   util_calibrate(prices, quantities)
 leontief
 #> <Leontief>
-#> function (quantities, efficiency, weights) 
-#> {
-#>     efficiency * min(quantities/weights, na.rm = TRUE)
-#> }
+#> function(quantities, efficiency, weights) {
+#>     efficiency * min(quantities / weights, na.rm = TRUE)
+#>   }
+#> <bytecode: 0x000002221d5976c8>
+#> <environment: 0x000002221d58f9a0>
 #> (
 #>   efficiency = 3
-#>   weights    = [1] 0.5 0.5
+#>   weights =    [1] 0.5 0.5
 #>   ...
 #> )
-ces_minus_1_5 <- util_ces(substitution = -1.5) |> 
+ces_minus_1_5 <- util_ces(substitution = -1.5) |>
   util_calibrate(prices, quantities)
 ces_minus_1_5
 #> <CES(-1.5)>
-#> function (quantities, substitution, homogeneity, efficiency, 
-#>     weights) 
-#> {
-#>     efficiency * sum(weights * quantities^substitution, na.rm = TRUE)^(homogeneity/substitution)
-#> }
+#> function(quantities, substitution, homogeneity, efficiency, weights) {
+#>     efficiency *
+#>       sum(weights * quantities^substitution, na.rm = TRUE)^(homogeneity /
+#>         substitution)
+#>   }
+#> <bytecode: 0x000002221d70f498>
+#> <environment: 0x000002221d70b888>
 #> (
 #>   substitution = -1.5
-#>   homogeneity  = 1
-#>   efficiency   = 6
-#>   weights      = [1] 0.6666667 0.3333333
+#>   homogeneity =  1
+#>   efficiency =   6
+#>   weights =      [1] 0.6666667 0.3333333
 #>   ...
 #> )
 ```
@@ -110,9 +115,14 @@ util_2goods_budget(prices, income)(1:6)
 
 #### Sample plots
 
-<img src="man/figures/README-plot-indifference-curve-and-budget-line-1.png" width="100%" />
+    #> Warning: package 'geomtextpath' was built under R version 4.6.1
 
-<img src="man/figures/README-plot-utility-level-1.png" width="100%" />
+<img
+src="man/figures/README-plot-indifference-curve-and-budget-line-1.png"
+style="width:100.0%" />
+
+<img src="man/figures/README-plot-utility-level-1.png"
+style="width:100.0%" />
 
 ### Marginal utility for two goods
 
@@ -132,9 +142,11 @@ util_2goods_utility(cobb_douglas, quantities[[2]], gradient = TRUE)(1:6)
 
 #### Sample plots
 
-<img src="man/figures/README-plot-marginal-utility-1.png" width="100%" />
+<img src="man/figures/README-plot-marginal-utility-1.png"
+style="width:100.0%" />
 
-<img src="man/figures/README-plot-utility-level-hline-1.png" width="100%" />
+<img src="man/figures/README-plot-utility-level-hline-1.png"
+style="width:100.0%" />
 
 ### Price effect for two goods
 
@@ -142,13 +154,15 @@ util_2goods_utility(cobb_douglas, quantities[[2]], gradient = TRUE)(1:6)
 prices_new <- c(2, 2)
 
 # Price effect
-quantities_new <- util_demand(cobb_douglas, prices_new,
-                              income = income)
+quantities_new <- util_demand(cobb_douglas, prices_new, income = income)
 quantities_new
 #> [1] 4 2
 # Substitution effect
-quantities_substitution <- util_demand(cobb_douglas, prices_new,
-                                       utility = cobb_douglas(quantities))
+quantities_substitution <- util_demand(
+  cobb_douglas,
+  prices_new,
+  utility = cobb_douglas(quantities)
+)
 quantities_substitution
 #> [1] 2.519842 1.259921
 # Income effect
@@ -158,7 +172,8 @@ quantities_new - quantities_substitution
 
 #### Sample plots
 
-<img src="man/figures/README-plot-price-effect-1.png" width="100%" />
+<img src="man/figures/README-plot-price-effect-1.png"
+style="width:100.0%" />
 
 ## Examples for composite goods
 
