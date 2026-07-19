@@ -359,4 +359,105 @@ ggplot() +
 
 ## Examples for composite goods
 
-- TODO
+A composite good aggregates several elementary (or already-composite) goods
+into one new good through a utility/production function, giving it its own
+derived price (a price index) and quantity. Composite goods can themselves
+feed into a further composite, forming a tree — e.g. an input-output-table
+style nested production structure.
+
+- `goods_by()`: Build a tree of goods from a data frame, grouped by the
+  given variables.
+- `goods_compose()`: Aggregate a group of goods into one composite good
+  using a utility function (e.g. `util_cobb_douglas()`, `util_leontief()`,
+  `util_ces()`).
+- `goods_produce()`: Given a target quantity at some node, derive the
+  implied quantities of its input goods down the tree.
+- `goods_consume()`: Given income at some node, derive the quantities
+  consumed at each level of the tree.
+- `goods_reprice()`: Propagate a price change at the leaves up the tree,
+  recomputing composite price indices.
+- `goods_trade_iceberg()` / `goods_trade_update()`: Apply (or update) an
+  iceberg trade cost as another kind of composite-good transformation.
+
+As an example, consider two industries — manufacturing and services — each
+producing gross output from value added (labor and capital, combined with a
+Cobb-Douglas function) and intermediate input bought from the other
+industry (combined with a Leontief function, i.e. fixed proportions):
+
+```{r}
+#| label: composite-goods-industry
+labor_capital <- tibble::tibble(
+  output_sector = rep(c("manufacturing", "services"), each = 2),
+  input_sector = rep(c("labor", "capital"), times = 2),
+  quantity = c(60, 40, 30, 20)
+)
+value_added <- labor_capital |>
+  goods_by(output_sector, input_sector) |>
+  goods_compose(util_cobb_douglas(), node = factor("value_added"))
+
+intermediate_input <- tibble::tibble(
+  output_sector = c("manufacturing", "services"),
+  input_sector = c("services", "manufacturing"),
+  quantity = c(15, 10)
+) |>
+  goods_by(output_sector, input_sector)
+
+industry <- rbind(intermediate_input, value_added) |>
+  goods_compose(util_leontief())
+industry
+```
+
+`timbr::climb()` flattens the tree so every level can be inspected at once:
+
+```{r}
+#| label: composite-goods-climb
+industry |>
+  timbr::climb(output_sector, input_sector) |>
+  tibble::as_tibble()
+```
+
+`goods_produce()` derives the input quantities implied by a target output
+quantity, working down the tree:
+
+```{r}
+#| label: composite-goods-produce
+quantities_new <- tibble::tibble(
+  output_sector = c("manufacturing", "services"),
+  quantity = c(150, 90)
+)
+industry |>
+  goods_produce(quantities_new) |>
+  timbr::climb(output_sector, input_sector) |>
+  tibble::as_tibble()
+```
+
+`goods_consume()` derives the quantities consumed at each level implied by a
+given income:
+
+```{r}
+#| label: composite-goods-consume
+incomes <- tibble::tibble(
+  output_sector = c("manufacturing", "services"),
+  income = c(200, 100)
+)
+industry |>
+  goods_consume(incomes) |>
+  timbr::climb(output_sector, input_sector) |>
+  tibble::as_tibble()
+```
+
+`goods_reprice()` propagates a leaf price change up the tree: raising the
+price of labor in manufacturing raises the composite price of
+manufacturing's gross output, while leaving services (which doesn't use
+manufacturing's labor) unaffected:
+
+```{r}
+#| label: composite-goods-reprice
+prices_new <- tibble::tibble(
+  output_sector = "manufacturing",
+  input_sector = "labor",
+  price = 1.5
+)
+industry |>
+  goods_reprice(prices_new)
+```
