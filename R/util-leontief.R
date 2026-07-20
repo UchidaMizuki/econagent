@@ -46,6 +46,7 @@ util_calibrate.util_leontief <- function(f, prices, quantities, ...) {
   rlang::check_dots_empty()
 
   f$weights <- quantities / sum(quantities)
+  f$weights[is.nan(f$weights)] <- 0
   f$efficiency <- sum(prices * quantities) /
     min(quantities / f$weights, na.rm = TRUE)
   f

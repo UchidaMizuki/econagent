@@ -60,3 +60,13 @@ test_that("Non-homothetic CES utility works", {
   #                                utility = utility)
   test_util_indirect_gradient(f, prices, income = income)
 })
+
+test_that("util_calibrate.util_ces() resolves 0/0 weights to 0", {
+  prices <- c(1, 1, 5)
+  quantities <- c(2, -2, 0)
+
+  f <- util_ces(substitution = 0) |>
+    util_calibrate(prices = prices, quantities = quantities)
+
+  expect_equal(f$weights[[3]], 0)
+})

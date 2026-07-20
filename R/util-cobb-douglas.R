@@ -63,6 +63,7 @@ util_calibrate.util_cobb_douglas <- function(f, prices, quantities, ...) {
 
   weights <- prices * quantities
   weights <- weights / sum(weights)
+  weights[is.nan(weights)] <- 0
 
   f$weights <- weights
   f$efficiency <- sum(prices * quantities) /

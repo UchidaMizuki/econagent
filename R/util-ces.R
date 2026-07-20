@@ -101,6 +101,7 @@ util_calibrate.util_ces <- function(f, prices, quantities, ...) {
 
   weights <- prices * quantities^(1 - f$substitution)
   weights <- weights / sum(weights)
+  weights[is.nan(weights)] <- 0
 
   f$weights <- weights
   f$efficiency <- sum(prices * quantities) /
