@@ -94,6 +94,7 @@ util_gradient.util_ces <- function(f, quantities, ...) {
 #' @export
 util_calibrate.util_ces <- function(f, prices, quantities, ...) {
   rlang::check_dots_empty()
+  check_quantities_nonnegative(quantities)
 
   if (!inherits(f, "util_homothetic")) {
     cli::cli_abort("The utility function {.arg f} must be homothetic.")

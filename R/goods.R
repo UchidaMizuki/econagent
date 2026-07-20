@@ -26,11 +26,26 @@ goods_by <- function(.data, ...) {
 #' @param utility A `econ_util` object or a data frame that contains columns
 #' `utility`.
 #' @param node A node name for composition goods. By default, it is `NULL`.
+#' @param utility_negative A `econ_util` object used for quantities with a
+#' negative sign, or `NULL` (the default). If not `NULL`, `utility` (which
+#' must be a single `econ_util` object) is wrapped with
+#' [util_sign_split()] so that mixed-sign quantities can be calibrated;
+#' negative quantities are calibrated with `utility_negative` after being
+#' sign-flipped.
 #'
 #' @return A `econ_goods` object.
 #'
 #' @export
-goods_compose <- function(data, utility, node = NULL) {
+goods_compose <- function(data, utility, node = NULL, utility_negative = NULL) {
+  if (!is.null(utility_negative)) {
+    if (!inherits(utility, "econ_util")) {
+      cli::cli_abort(
+        "{.arg utility_negative} requires {.arg utility} to be a single {.cls econ_util} object."
+      )
+    }
+    utility <- util_sign_split(utility, utility_negative = utility_negative)
+  }
+
   data <- data |>
     dplyr::summarise(
       prices = .data$price |>

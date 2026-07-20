@@ -14,3 +14,9 @@ check_weights_nonnegative <- function(weights) {
     cli::cli_abort("{.code weights} must be non-negative.")
   }
 }
+
+check_quantities_nonnegative <- function(quantities) {
+  if (!rlang::is_empty(quantities) && any(quantities < 0)) {
+    cli::cli_abort("{.code quantities} must be non-negative.")
+  }
+}

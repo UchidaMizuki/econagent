@@ -24,10 +24,23 @@ test_that("Leontief utility works", {
 
 test_that("util_calibrate.util_leontief() resolves 0/0 weights to 0", {
   prices <- c(1, 1, 5)
-  quantities <- c(2, -2, 0)
+  quantities <- c(0, 0, 0)
 
-  f <- util_leontief() |>
-    util_calibrate(prices = prices, quantities = quantities)
+  # With non-negative quantities, weights can only cancel to 0/0 when every
+  # quantity is 0, which also makes `min(quantities / weights)` empty (a
+  # pre-existing, unrelated edge case that warns rather than errors).
+  f <- suppressWarnings(
+    util_leontief() |> util_calibrate(prices = prices, quantities = quantities)
+  )
 
-  expect_equal(f$weights[[3]], 0)
+  expect_equal(f$weights, c(0, 0, 0))
+})
+
+test_that("util_calibrate.util_leontief() rejects negative quantities", {
+  f <- util_leontief()
+
+  expect_snapshot(
+    f |> util_calibrate(prices = c(1, 1, 5), quantities = c(2, -2, 0)),
+    error = TRUE
+  )
 })

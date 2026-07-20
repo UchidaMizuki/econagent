@@ -44,6 +44,7 @@ util_gradient.util_leontief <- function(f, quantities, ...) {
 #' @export
 util_calibrate.util_leontief <- function(f, prices, quantities, ...) {
   rlang::check_dots_empty()
+  check_quantities_nonnegative(quantities)
 
   f$weights <- quantities / sum(quantities)
   f$weights[is.nan(f$weights)] <- 0
