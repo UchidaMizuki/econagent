@@ -55,10 +55,19 @@ test_that("Non-homothetic Cobb-Douglas utility works", {
 
 test_that("util_calibrate.util_cobb_douglas() resolves 0/0 weights to 0", {
   prices <- c(1, 1, 5)
-  quantities <- c(2, -2, 0)
+  quantities <- c(0, 0, 0)
 
   f <- util_cobb_douglas() |>
     util_calibrate(prices = prices, quantities = quantities)
 
-  expect_equal(f$weights[[3]], 0)
+  expect_equal(f$weights, c(0, 0, 0))
+})
+
+test_that("util_calibrate.util_cobb_douglas() rejects negative quantities", {
+  f <- util_cobb_douglas()
+
+  expect_snapshot(
+    f |> util_calibrate(prices = c(1, 1, 5), quantities = c(2, -2, 0)),
+    error = TRUE
+  )
 })

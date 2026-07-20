@@ -4,7 +4,7 @@
 \alias{goods_compose}
 \title{Compose goods}
 \usage{
-goods_compose(data, utility, node = NULL)
+goods_compose(data, utility, node = NULL, utility_negative = NULL)
 }
 \arguments{
 \item{data}{A \code{econ_goods} object.}
@@ -13,6 +13,13 @@ goods_compose(data, utility, node = NULL)
 \code{utility}.}
 
 \item{node}{A node name for composition goods. By default, it is \code{NULL}.}
+
+\item{utility_negative}{A \code{econ_util} object used for quantities with a
+negative sign, or \code{NULL} (the default). If not \code{NULL}, \code{utility} (which
+must be a single \code{econ_util} object) is wrapped with
+\code{\link[=util_sign_split]{util_sign_split()}} so that mixed-sign quantities can be calibrated;
+negative quantities are calibrated with \code{utility_negative} after being
+sign-flipped.}
 }
 \value{
 A \code{econ_goods} object.
