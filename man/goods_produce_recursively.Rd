@@ -11,7 +11,7 @@ goods_produce_recursively(data, f, ...)
 
 \item{f}{A function that returns a data frame with columns \code{quantity}.}
 
-\item{...}{Additional arguments passed to \code{stats::optim()}.}
+\item{...}{Additional arguments passed to \code{FixedPoint::FixedPoint()}.}
 }
 \value{
 A \code{econ_goods} object.

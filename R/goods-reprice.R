@@ -29,7 +29,7 @@ goods_reprice <- function(data, prices = NULL) {
 #'
 #' @param data A `econ_goods` object.
 #' @param f A function that returns a data frame with columns `price`.
-#' @param ... Additional arguments passed to `stats::optim()`.
+#' @param ... Additional arguments passed to `FixedPoint::FixedPoint()`.
 #'
 #' @return A `econ_goods` object.
 #'
