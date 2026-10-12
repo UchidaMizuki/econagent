@@ -15,7 +15,7 @@ util_leontief <- function(efficiency = NA_real_, weights = double()) {
     efficiency * min(quantities / weights, na.rm = TRUE)
   }
 
-  new_util_homothetic(
+  new_util_linear_homogeneous(
     f,
     efficiency = efficiency,
     weights = weights,

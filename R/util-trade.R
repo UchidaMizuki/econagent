@@ -2,7 +2,7 @@ util_trade_iceberg <- function(cost) {
   f <- function(quantities, cost) {
     quantities / cost
   }
-  new_util_homothetic(f, cost = cost, class = "util_trade_iceberg")
+  new_util_linear_homogeneous(f, cost = cost, class = "util_trade_iceberg")
 }
 
 #' @export

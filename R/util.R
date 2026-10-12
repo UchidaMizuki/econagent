@@ -174,7 +174,7 @@ util_expenditure <- function(f, prices, utility, gradient = FALSE, ...) {
 #'
 #' @export
 util_indirect <- function(f, prices, income, gradient = FALSE, ...) {
-  if (gradient && inherits(f, "util_homothetic")) {
+  if (gradient && inherits(f, "util_linear_homogeneous")) {
     # Roy's identity with dV/dI = V / I, which also works at the kinks of
     # Leontief functions
     quantities <- util_demand_marshallian(f, prices, income, ...)

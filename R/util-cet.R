@@ -5,10 +5,10 @@
 #' @param elasticity_of_transformation A positive scalar numeric of elasticity
 #' of transformation.
 #' @param homogeneity A scalar numeric of degree of homogeneity. By default,
-#' `1`. When `homothetic = TRUE`, `homogeneity` must be equal to `1`.
+#' `1`. Only linearly homogeneous functions (`homogeneity = 1`) can be
+#' calibrated with [util_calibrate()].
 #' @param efficiency A scalar numeric of efficiency parameter.
 #' @param weights A numeric vector of weights.
-#' @param homothetic A logical scalar. By default, `homogeneity == 1`.
 #'
 #' @return A `util_cet` object.
 #'
@@ -21,8 +21,7 @@ util_cet <- function(
   substitution,
   homogeneity = 1,
   efficiency = NA_real_,
-  weights = double(),
-  homothetic = homogeneity == 1
+  weights = double()
 ) {
   check_substitution_cet(substitution)
 
@@ -31,7 +30,6 @@ util_cet <- function(
     homogeneity = homogeneity,
     efficiency = efficiency,
     weights = weights,
-    homothetic = homothetic,
     class = "util_cet"
   )
 }
@@ -42,16 +40,14 @@ util_cet2 <- function(
   elasticity_of_transformation,
   homogeneity = 1,
   efficiency = NA_real_,
-  weights = double(),
-  homothetic = homogeneity == 1
+  weights = double()
 ) {
   util_cet(
     substitution = (elasticity_of_transformation + 1) /
       elasticity_of_transformation,
     homogeneity = homogeneity,
     efficiency = efficiency,
-    weights = weights,
-    homothetic = homothetic
+    weights = weights
   )
 }
 

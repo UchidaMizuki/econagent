@@ -4,19 +4,15 @@
 \alias{util_cobb_douglas}
 \title{Cobb-Douglas utility function}
 \usage{
-util_cobb_douglas(
-  efficiency = NA_real_,
-  weights = double(),
-  homothetic = length(weights) == 0 || sum(weights) == 1
-)
+util_cobb_douglas(efficiency = NA_real_, weights = double())
 }
 \arguments{
 \item{efficiency}{A scalar numeric of efficiency parameter. By default,
 \code{NA_real_}.}
 
-\item{weights}{A numeric vector of weight parameters. By default, \code{double()}.}
-
-\item{homothetic}{A logical scalar. By default, \code{TRUE}.}
+\item{weights}{A numeric vector of weight parameters. By default, \code{double()}.
+Only linearly homogeneous functions (\code{sum(weights) == 1}) can be calibrated
+with \code{\link[=util_calibrate]{util_calibrate()}}; the default empty \code{weights} are set by calibration.}
 }
 \value{
 A \code{util_cobb_douglas} object.

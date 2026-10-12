@@ -9,16 +9,14 @@ util_ces(
   substitution,
   homogeneity = 1,
   efficiency = NA_real_,
-  weights = double(),
-  homothetic = homogeneity == 1
+  weights = double()
 )
 
 util_ces2(
   elasticity_of_substitution,
   homogeneity = 1,
   efficiency = NA_real_,
-  weights = double(),
-  homothetic = homogeneity == 1
+  weights = double()
 )
 }
 \arguments{
@@ -26,13 +24,12 @@ util_ces2(
 than \code{1} and not equal to \code{0}.}
 
 \item{homogeneity}{A scalar numeric of degree of homogeneity. By default,
-\code{1}. When \code{homothetic = TRUE}, \code{homogeneity} must be equal to \code{1}.}
+\code{1}. Only linearly homogeneous functions (\code{homogeneity = 1}) can be
+calibrated with \code{\link[=util_calibrate]{util_calibrate()}}.}
 
 \item{efficiency}{A scalar numeric of efficiency parameter.}
 
 \item{weights}{A numeric vector of weights.}
-
-\item{homothetic}{A logical scalar. By default, \code{homogeneity == 1}.}
 
 \item{elasticity_of_substitution}{A positive scalar numeric of elasticity
 of substitution, not equal to \code{1}.}

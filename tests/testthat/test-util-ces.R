@@ -1,4 +1,4 @@
-test_that("Homothetic CES utility works", {
+test_that("Linearly homogeneous CES utility works", {
   set.seed(1234)
 
   size <- 5
@@ -22,7 +22,7 @@ test_that("Homothetic CES utility works", {
   test_util_indirect_gradient(f, prices, income = income)
 })
 
-test_that("Non-homothetic CES utility works", {
+test_that("Non-linearly homogeneous CES utility works", {
   set.seed(1234)
 
   size <- 5

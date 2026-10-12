@@ -5,10 +5,10 @@
 #' @param elasticity_of_substitution A positive scalar numeric of elasticity
 #' of substitution, not equal to `1`.
 #' @param homogeneity A scalar numeric of degree of homogeneity. By default,
-#' `1`. When `homothetic = TRUE`, `homogeneity` must be equal to `1`.
+#' `1`. Only linearly homogeneous functions (`homogeneity = 1`) can be
+#' calibrated with [util_calibrate()].
 #' @param efficiency A scalar numeric of efficiency parameter.
 #' @param weights A numeric vector of weights.
-#' @param homothetic A logical scalar. By default, `homogeneity == 1`.
 #'
 #' @return A `util_ces` object.
 #'
@@ -21,8 +21,7 @@ util_ces <- function(
   substitution,
   homogeneity = 1,
   efficiency = NA_real_,
-  weights = double(),
-  homothetic = homogeneity == 1
+  weights = double()
 ) {
   check_substitution_ces(substitution)
 
@@ -30,8 +29,7 @@ util_ces <- function(
     substitution,
     homogeneity = homogeneity,
     efficiency = efficiency,
-    weights = weights,
-    homothetic = homothetic
+    weights = weights
   )
 }
 
@@ -40,7 +38,6 @@ util_ces_impl <- function(
   homogeneity,
   efficiency,
   weights,
-  homothetic,
   class = character()
 ) {
   check_efficiency_nonnegative(efficiency)
@@ -52,12 +49,8 @@ util_ces_impl <- function(
         substitution)
   }
 
-  if (homothetic) {
-    if (homogeneity != 1) {
-      cli::cli_abort("{.arg homogeneity} must be equal to 1.")
-    }
-
-    new_util_homothetic(
+  if (homogeneity == 1) {
+    new_util_linear_homogeneous(
       f,
       substitution = substitution,
       homogeneity = homogeneity,
@@ -83,16 +76,14 @@ util_ces2 <- function(
   elasticity_of_substitution,
   homogeneity = 1,
   efficiency = NA_real_,
-  weights = double(),
-  homothetic = homogeneity == 1
+  weights = double()
 ) {
   util_ces(
     substitution = (elasticity_of_substitution - 1) /
       elasticity_of_substitution,
     homogeneity = homogeneity,
     efficiency = efficiency,
-    weights = weights,
-    homothetic = homothetic
+    weights = weights
   )
 }
 
@@ -115,8 +106,10 @@ util_gradient.util_ces <- function(f, quantities, ...) {
 util_calibrate.util_ces <- function(f, prices, quantities, ...) {
   rlang::check_dots_empty()
 
-  if (!inherits(f, "util_homothetic")) {
-    cli::cli_abort("The utility function {.arg f} must be homothetic.")
+  if (!inherits(f, "util_linear_homogeneous")) {
+    cli::cli_abort(
+      "The utility function {.arg f} must be linearly homogeneous."
+    )
   }
 
   weights <- prices * quantities^(1 - f$substitution)
@@ -181,7 +174,7 @@ type_sum.util_ces <- function(x) {
 
 #' @export
 obj_sum.util_ces <- function(x) {
-  if (inherits(x, "util_homothetic")) {
+  if (inherits(x, "util_linear_homogeneous")) {
     paste0(type_sum(x), "(", big_mark(x$substitution), ")")
   } else {
     paste0(

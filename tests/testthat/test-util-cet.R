@@ -1,4 +1,4 @@
-test_that("Homothetic CET utility works", {
+test_that("Linearly homogeneous CET utility works", {
   set.seed(1234)
 
   size <- 5
@@ -21,7 +21,7 @@ test_that("Homothetic CET utility works", {
   test_util_indirect_gradient(f, prices, income = income)
 })
 
-test_that("Non-homothetic CET utility works", {
+test_that("Non-linearly homogeneous CET utility works", {
   set.seed(1234)
 
   size <- 5

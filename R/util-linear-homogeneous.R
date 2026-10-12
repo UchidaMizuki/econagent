@@ -1,18 +1,22 @@
-#' Create a new homothetic utility function
+#' Create a new linearly homogeneous utility function
+#'
+#' A linearly homogeneous (homogeneous of degree one) utility function
+#' satisfies `f(t * quantities) == t * f(quantities)` for `t > 0`. This allows
+#' closed-form Hicksian demand.
 #'
 #' @param f A function that returns the utility.
 #' @param ... Parameters to be passed to `f`.
 #' @param class Name of subclass.
 #'
-#' @return A `util_homothetic` object.
+#' @return A `util_linear_homogeneous` object.
 #'
 #' @export
-new_util_homothetic <- function(f, ..., class = character()) {
-  new_util(f, ..., class = c(class, "util_homothetic"))
+new_util_linear_homogeneous <- function(f, ..., class = character()) {
+  new_util(f, ..., class = c(class, "util_linear_homogeneous"))
 }
 
 #' @export
-util_demand_hicksian.util_homothetic <- function(
+util_demand_hicksian.util_linear_homogeneous <- function(
   f,
   prices,
   utility,
