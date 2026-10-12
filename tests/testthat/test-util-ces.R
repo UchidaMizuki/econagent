@@ -74,3 +74,12 @@ test_that("util_calibrate.util_ces() rejects negative quantities", {
     error = TRUE
   )
 })
+
+test_that("util_ces() validates `substitution`", {
+  expect_snapshot(error = TRUE, {
+    util_ces(0)
+    util_ces(1)
+    util_ces(1.5)
+    util_ces(-Inf)
+  })
+})

@@ -22,7 +22,8 @@ util_ces2(
 )
 }
 \arguments{
-\item{substitution}{A scalar numeric of substitution parameter.}
+\item{substitution}{A scalar numeric of substitution parameter. Must be less
+than \code{1} and not equal to \code{0}.}
 
 \item{homogeneity}{A scalar numeric of degree of homogeneity. By default,
 \code{1}. When \code{homothetic = TRUE}, \code{homogeneity} must be equal to \code{1}.}
@@ -33,8 +34,8 @@ util_ces2(
 
 \item{homothetic}{A logical scalar. By default, \code{homogeneity == 1}.}
 
-\item{elasticity_of_substitution}{A scalar numeric of elasticity of
-substitution.}
+\item{elasticity_of_substitution}{A positive scalar numeric of elasticity
+of substitution, not equal to \code{1}.}
 }
 \value{
 A \code{util_ces} object.

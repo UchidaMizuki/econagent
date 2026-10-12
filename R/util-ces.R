@@ -1,8 +1,9 @@
 #' Constant elasticity of substitution (CES) utility function
 #'
-#' @param substitution A scalar numeric of substitution parameter.
-#' @param elasticity_of_substitution A scalar numeric of elasticity of
-#' substitution.
+#' @param substitution A scalar numeric of substitution parameter. Must be less
+#' than `1` and not equal to `0`.
+#' @param elasticity_of_substitution A positive scalar numeric of elasticity
+#' of substitution, not equal to `1`.
 #' @param homogeneity A scalar numeric of degree of homogeneity. By default,
 #' `1`. When `homothetic = TRUE`, `homogeneity` must be equal to `1`.
 #' @param efficiency A scalar numeric of efficiency parameter.
@@ -22,6 +23,25 @@ util_ces <- function(
   efficiency = NA_real_,
   weights = double(),
   homothetic = homogeneity == 1
+) {
+  check_substitution_ces(substitution)
+
+  util_ces_impl(
+    substitution,
+    homogeneity = homogeneity,
+    efficiency = efficiency,
+    weights = weights,
+    homothetic = homothetic
+  )
+}
+
+util_ces_impl <- function(
+  substitution,
+  homogeneity,
+  efficiency,
+  weights,
+  homothetic,
+  class = character()
 ) {
   check_efficiency_nonnegative(efficiency)
   check_weights_nonnegative(weights)
@@ -43,7 +63,7 @@ util_ces <- function(
       homogeneity = homogeneity,
       efficiency = efficiency,
       weights = weights,
-      class = "util_ces"
+      class = c(class, "util_ces")
     )
   } else {
     new_util(
@@ -52,7 +72,7 @@ util_ces <- function(
       homogeneity = homogeneity,
       efficiency = efficiency,
       weights = weights,
-      class = "util_ces"
+      class = c(class, "util_ces")
     )
   }
 }

@@ -22,7 +22,7 @@ util_cet2(
 )
 }
 \arguments{
-\item{substitution}{A scalar numeric of substitution parameter. Typically
+\item{substitution}{A scalar numeric of substitution parameter. Must be
 greater than \code{1}, so that the transformation surface is convex.}
 
 \item{homogeneity}{A scalar numeric of degree of homogeneity. By default,
@@ -34,8 +34,8 @@ greater than \code{1}, so that the transformation surface is convex.}
 
 \item{homothetic}{A logical scalar. By default, \code{homogeneity == 1}.}
 
-\item{elasticity_of_transformation}{A scalar numeric of elasticity of
-transformation.}
+\item{elasticity_of_transformation}{A positive scalar numeric of elasticity
+of transformation.}
 }
 \value{
 A \code{util_cet} object.

@@ -6,6 +6,10 @@
 
 * `util_calibrate()` now errors when `quantities` contains negative values, instead of silently returning `Inf`/`NaN` weights or a meaningless `efficiency` (#2).
 
+* `util_ces()` and `util_ces2()` now require `substitution < 1` and `substitution != 0`, and `util_cet()` and `util_cet2()` require `substitution > 1`. Invalid values previously led to division by zero or meaningless calibration results (#9).
+
+* `util_cet()` objects now inherit from `util_ces` (#8).
+
 * `util_expenditure(gradient = TRUE)` now returns the Hicksian demand directly (Shephard's lemma), so it also works for non-homothetic utility functions (#10).
 
 * `util_indirect(gradient = TRUE)` now returns a valid gradient for `util_leontief()` at the calibrated point instead of `NA` (#11).

@@ -1,9 +1,9 @@
 #' Constant elasticity of transformation (CET) function
 #'
-#' @param substitution A scalar numeric of substitution parameter. Typically
+#' @param substitution A scalar numeric of substitution parameter. Must be
 #' greater than `1`, so that the transformation surface is convex.
-#' @param elasticity_of_transformation A scalar numeric of elasticity of
-#' transformation.
+#' @param elasticity_of_transformation A positive scalar numeric of elasticity
+#' of transformation.
 #' @param homogeneity A scalar numeric of degree of homogeneity. By default,
 #' `1`. When `homothetic = TRUE`, `homogeneity` must be equal to `1`.
 #' @param efficiency A scalar numeric of efficiency parameter.
@@ -24,15 +24,16 @@ util_cet <- function(
   weights = double(),
   homothetic = homogeneity == 1
 ) {
-  f <- util_ces(
+  check_substitution_cet(substitution)
+
+  util_ces_impl(
     substitution,
     homogeneity = homogeneity,
     efficiency = efficiency,
     weights = weights,
-    homothetic = homothetic
+    homothetic = homothetic,
+    class = "util_cet"
   )
-  class(f)[[1]] <- "util_cet"
-  f
 }
 
 #' @rdname util_cet
@@ -53,18 +54,6 @@ util_cet2 <- function(
     homothetic = homothetic
   )
 }
-
-#' @export
-util_gradient.util_cet <- util_gradient.util_ces
-
-#' @export
-util_calibrate.util_cet <- util_calibrate.util_ces
-
-#' @export
-util_demand_marshallian.util_cet <- util_demand_marshallian.util_ces
-
-#' @export
-obj_sum.util_cet <- obj_sum.util_ces
 
 #' @export
 type_sum.util_cet <- function(x) {
