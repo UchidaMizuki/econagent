@@ -153,11 +153,8 @@ util_demand <- function(
 #' @export
 util_expenditure <- function(f, prices, utility, gradient = FALSE, ...) {
   if (gradient) {
-    util_demand_hicksian(f, prices, utility, ...) +
-      as.double(
-        prices %*%
-          util_demand_hicksian(f, prices, utility, gradient = TRUE, ...)
-      )
+    # Shephard's lemma
+    util_demand_hicksian(f, prices, utility, ...)
   } else {
     sum(prices * util_demand_hicksian(f, prices, utility, ...))
   }

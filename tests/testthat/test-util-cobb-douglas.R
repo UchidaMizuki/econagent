@@ -48,8 +48,7 @@ test_that("Non-homothetic Cobb-Douglas utility works", {
     utility = utility,
     type = "marshallian"
   )
-  # test_util_expenditure_gradient(f, prices,
-  #                                utility = utility)
+  test_util_expenditure_gradient(f, prices, utility = utility)
   test_util_indirect_gradient(f, prices, income = income)
 })
 
