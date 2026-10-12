@@ -38,8 +38,10 @@ goods_trade_iceberg <- function(data, trade) {
 #'
 #' @export
 goods_trade_update <- function(data, trade) {
-  trade <- trade |>
-    dplyr::rename_with(~"cost", dplyr::last_col(1))
+  if (!"cost" %in% names(trade)) {
+    cli::cli_abort("{.arg trade} must contain a {.code cost} column.")
+  }
+
   data |>
     goods_update(trade)
 }
