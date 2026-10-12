@@ -39,7 +39,7 @@ goods_consume <- function(data, incomes = NULL) {
 #'
 #' @param data A `econ_goods` object.
 #' @param f A function that returns a data frame with columns `income`.
-#' @param ... Additional arguments passed to `stats::optim()`.
+#' @param ... Additional arguments passed to `FixedPoint::FixedPoint()`.
 #'
 #' @return A `econ_goods` object.
 #'

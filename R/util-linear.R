@@ -15,7 +15,7 @@ util_linear <- function(efficiency = NA_real_, weights = double()) {
     efficiency * sum(weights * quantities)
   }
 
-  new_util_homothetic(
+  new_util_linear_homogeneous(
     f,
     efficiency = efficiency,
     weights = weights,

@@ -11,7 +11,7 @@ goods_reprice_recursively(data, f, ...)
 
 \item{f}{A function that returns a data frame with columns \code{price}.}
 
-\item{...}{Additional arguments passed to \code{stats::optim()}.}
+\item{...}{Additional arguments passed to \code{FixedPoint::FixedPoint()}.}
 }
 \value{
 A \code{econ_goods} object.

@@ -1,4 +1,4 @@
-test_that("Homothetic Cobb-Douglas utility works", {
+test_that("Linearly homogeneous Cobb-Douglas utility works", {
   set.seed(1234)
 
   size <- 5
@@ -21,7 +21,7 @@ test_that("Homothetic Cobb-Douglas utility works", {
   test_util_indirect_gradient(f, prices, income = income)
 })
 
-test_that("Non-homothetic Cobb-Douglas utility works", {
+test_that("Non-linearly homogeneous Cobb-Douglas utility works", {
   set.seed(1234)
 
   size <- 5
@@ -48,17 +48,21 @@ test_that("Non-homothetic Cobb-Douglas utility works", {
     utility = utility,
     type = "marshallian"
   )
-  # test_util_expenditure_gradient(f, prices,
-  #                                utility = utility)
+  test_util_expenditure_gradient(f, prices, utility = utility)
   test_util_indirect_gradient(f, prices, income = income)
 })
 
 test_that("util_calibrate.util_cobb_douglas() resolves 0/0 weights to 0", {
-  prices <- c(1, 1, 5)
-  quantities <- c(2, -2, 0)
-
   f <- util_cobb_douglas() |>
-    util_calibrate(prices = prices, quantities = quantities)
+    util_calibrate(prices = c(1, 1, 5), quantities = c(0, 0, 0))
 
-  expect_equal(f$weights[[3]], 0)
+  expect_equal(f$weights, c(0, 0, 0))
+})
+
+test_that("util_calibrate.util_cobb_douglas() rejects negative quantities", {
+  expect_snapshot(
+    util_cobb_douglas() |>
+      util_calibrate(prices = c(1, 1, 5), quantities = c(2, -2, 0)),
+    error = TRUE
+  )
 })

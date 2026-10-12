@@ -1,4 +1,4 @@
-test_that("Homothetic CES utility works", {
+test_that("Linearly homogeneous CES utility works", {
   set.seed(1234)
 
   size <- 5
@@ -22,7 +22,7 @@ test_that("Homothetic CES utility works", {
   test_util_indirect_gradient(f, prices, income = income)
 })
 
-test_that("Non-homothetic CES utility works", {
+test_that("Non-linearly homogeneous CES utility works", {
   set.seed(1234)
 
   size <- 5
@@ -56,17 +56,30 @@ test_that("Non-homothetic CES utility works", {
     utility = utility,
     type = "marshallian"
   )
-  # test_util_expenditure_gradient(f, prices,
-  #                                utility = utility)
+  test_util_expenditure_gradient(f, prices, utility = utility)
   test_util_indirect_gradient(f, prices, income = income)
 })
 
 test_that("util_calibrate.util_ces() resolves 0/0 weights to 0", {
-  prices <- c(1, 1, 5)
-  quantities <- c(2, -2, 0)
+  f <- util_ces(substitution = 0.5) |>
+    util_calibrate(prices = c(1, 1, 5), quantities = c(0, 0, 0))
 
-  f <- util_ces(substitution = 0) |>
-    util_calibrate(prices = prices, quantities = quantities)
+  expect_equal(f$weights, c(0, 0, 0))
+})
 
-  expect_equal(f$weights[[3]], 0)
+test_that("util_calibrate.util_ces() rejects negative quantities", {
+  expect_snapshot(
+    util_ces(substitution = 0.5) |>
+      util_calibrate(prices = c(1, 1, 5), quantities = c(2, -2, 0)),
+    error = TRUE
+  )
+})
+
+test_that("util_ces() validates `substitution`", {
+  expect_snapshot(error = TRUE, {
+    util_ces(0)
+    util_ces(1)
+    util_ces(1.5)
+    util_ces(-Inf)
+  })
 })

@@ -1,4 +1,4 @@
-test_that("Homothetic CET utility works", {
+test_that("Linearly homogeneous CET utility works", {
   set.seed(1234)
 
   size <- 5
@@ -21,7 +21,7 @@ test_that("Homothetic CET utility works", {
   test_util_indirect_gradient(f, prices, income = income)
 })
 
-test_that("Non-homothetic CET utility works", {
+test_that("Non-linearly homogeneous CET utility works", {
   set.seed(1234)
 
   size <- 5
@@ -54,4 +54,16 @@ test_that("Non-homothetic CET utility works", {
     type = "marshallian"
   )
   test_util_indirect_gradient(f, prices, income = income)
+})
+
+test_that("util_cet() validates `substitution`", {
+  expect_snapshot(error = TRUE, {
+    util_cet(1)
+    util_cet(0.5)
+    util_cet(Inf)
+  })
+})
+
+test_that("util_cet() inherits from util_ces", {
+  expect_s3_class(util_cet(2), c("util_cet", "util_ces"))
 })

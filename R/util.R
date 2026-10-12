@@ -29,13 +29,14 @@ util_gradient <- function(f, quantities, ...) {
 #'
 #' @param f A `econ_util` object.
 #' @param prices A numeric vector of prices.
-#' @param quantities A numeric vector of quantities.
+#' @param quantities A non-negative numeric vector of quantities.
 #' @param ... Additional arguments.
 #'
 #' @return A `econ_util` object with calibrated parameters.
 #'
 #' @export
 util_calibrate <- function(f, prices, quantities, ...) {
+  check_quantities_nonnegative(quantities)
   UseMethod("util_calibrate")
 }
 
@@ -152,11 +153,8 @@ util_demand <- function(
 #' @export
 util_expenditure <- function(f, prices, utility, gradient = FALSE, ...) {
   if (gradient) {
-    util_demand_hicksian(f, prices, utility, ...) +
-      as.double(
-        prices %*%
-          util_demand_hicksian(f, prices, utility, gradient = TRUE, ...)
-      )
+    # Shephard's lemma
+    util_demand_hicksian(f, prices, utility, ...)
   } else {
     sum(prices * util_demand_hicksian(f, prices, utility, ...))
   }
@@ -176,7 +174,12 @@ util_expenditure <- function(f, prices, utility, gradient = FALSE, ...) {
 #'
 #' @export
 util_indirect <- function(f, prices, income, gradient = FALSE, ...) {
-  if (gradient) {
+  if (gradient && inherits(f, "util_linear_homogeneous")) {
+    # Roy's identity with dV/dI = V / I, which also works at the kinks of
+    # Leontief functions
+    quantities <- util_demand_marshallian(f, prices, income, ...)
+    -f(quantities) / income * quantities
+  } else if (gradient) {
     as.double(
       util_gradient(f, util_demand_marshallian(f, prices, income, ...)) %*%
         util_demand_marshallian(f, prices, income, gradient = TRUE, ...)
