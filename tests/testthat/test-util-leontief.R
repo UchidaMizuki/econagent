@@ -18,8 +18,7 @@ test_that("Leontief utility works", {
   # test_util_gradient(f, quantities)
   test_util_demand_gradient(f, prices, income = income, utility = utility)
   test_util_expenditure_gradient(f, prices, utility = utility)
-  # test_util_indirect_gradient(f, prices,
-  #                             income = income)
+  test_util_indirect_gradient(f, prices, income = income)
 })
 
 test_that("util_calibrate.util_leontief() resolves 0/0 weights to 0", {
