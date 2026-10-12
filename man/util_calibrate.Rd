@@ -11,7 +11,7 @@ util_calibrate(f, prices, quantities, ...)
 
 \item{prices}{A numeric vector of prices.}
 
-\item{quantities}{A numeric vector of quantities.}
+\item{quantities}{A non-negative numeric vector of quantities.}
 
 \item{...}{Additional arguments.}
 }

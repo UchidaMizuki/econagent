@@ -29,13 +29,14 @@ util_gradient <- function(f, quantities, ...) {
 #'
 #' @param f A `econ_util` object.
 #' @param prices A numeric vector of prices.
-#' @param quantities A numeric vector of quantities.
+#' @param quantities A non-negative numeric vector of quantities.
 #' @param ... Additional arguments.
 #'
 #' @return A `econ_util` object with calibrated parameters.
 #'
 #' @export
 util_calibrate <- function(f, prices, quantities, ...) {
+  check_quantities_nonnegative(quantities)
   UseMethod("util_calibrate")
 }
 

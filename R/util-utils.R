@@ -14,3 +14,12 @@ check_weights_nonnegative <- function(weights) {
     cli::cli_abort("{.code weights} must be non-negative.")
   }
 }
+
+check_quantities_nonnegative <- function(
+  quantities,
+  call = rlang::caller_env()
+) {
+  if (any(quantities < 0, na.rm = TRUE)) {
+    cli::cli_abort("{.arg quantities} must be non-negative.", call = call)
+  }
+}
